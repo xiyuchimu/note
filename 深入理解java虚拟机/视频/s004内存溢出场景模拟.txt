@@ -1,0 +1,11 @@
+1.public class Main {
+	public static void main(String[] args) {
+		List<Demo> demoList=new ArrayList<Demo>();
+		while(true){
+			demoList.add(new Demo());
+		}
+	}
+  }
+2.-XX:+HeapDumpOnOutOfMemoryError -Xms20m -Xmx20m
+3.eclipse memory analyer 
+  http://www.eclipse.org/mat/

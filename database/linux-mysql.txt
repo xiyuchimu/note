@@ -1,0 +1,11 @@
+systemctl start mysqld
+mysql -u root -p
+R5i+WS(Ozb_R
+
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'rooT123!';
+
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'rooT123!';
+GRANT ALL PRIVILEGES ON . TO 'root'@'%' IDENTIFIED BY 'rooT123!' WITH GRANT OPTION;
+firewall-cmd --zone=public --add-port=22/tcp --permanent
+
+

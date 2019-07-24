@@ -1,0 +1,49 @@
+Pre_Rf
+OFr_BF
+Pre_BF
+PPc_BF
+ivk_BF_PPc
+register_B_PPc
+init_MS
+init_A_E_M
+on_Rf
+Rg_Li
+fns_BF_initialization
+fns_Rf
+
+1.preparerefresh
+  --设置Spring容器的启动时间，撤销关闭状态，开启活跃状态。
+  --==>initPropertysources()；模板模式的应用
+    ==>validateRequireProperties()校验设置属性
+2.obtainBeanfactory
+  --xml读取
+  --BeanDefinition加载
+3.prepareBeanFactory
+  --从容器获取beanFactory
+4.postProcessBeanFactory
+  --子类覆盖方法做额外的处理
+  --增加对SPEL语言的支持
+    增加对属性编辑器的支持
+    增加对一些内置类，比如EnvironmentAware、MessageSourceAware的信息注入
+    设置了依赖功能可忽略的接口
+    注册一些固定依赖的属性
+    增加AspectJ的支持
+5.invokeBeanFactoryPostProcess
+  --激活各种BeanFactory处理器(customBeanFactory实现)
+6.registerBeanPostProcess
+  --注册拦截Bean创建的Bean处理器，这里只是注册，真正的调用是在getBean时候
+  --实现BeanPostProcessor接口的子类，设置到beanFactory中（@Autowired）
+  --AOP实现
+7.initMessageSource
+   --为上下文初始化Message源，即不同语言的消息体，国际化处理
+8.initApplicationEventMaticaster
+   --初始化应用消息广播器，并放入applicationEventMulticasterbean中
+9.onRefresh 
+  --留给子类来初始化其他的Bean
+10.registerListener
+  --在所有注册的bean中查找Listener bean，注册到消息广播器中
+  --始化过程中是否已经有事件产生，有则触发
+11.finishBeanFactoryInitialization
+  --初始化剩下的单实例（非惰性的singleton 且lazy-init：false）
+12.finishRefresh
+  --完成刷新过程，通知生命周期处理器lifecyclePro

@@ -1,0 +1,23 @@
+public class JMain extends JFrame{
+	private JButton jb;
+	public JMain(){
+		this.setBounds(200, 200, 400, 400);
+		this.setTitle("lanmbda²âÊÔ");
+		jb=new JButton();
+//		jb.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				System.out.println("1");
+//				
+//			}
+//		});
+		jb.addActionListener(event->System.out.println("1"));
+		this.add(jb);
+		this.setVisible(true);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}
+	public static void main(String[] args) {
+		new JMain();
+	}
+}

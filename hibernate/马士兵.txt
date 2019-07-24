@@ -1,0 +1,167 @@
+1.hibernate原理
+2.uselibrary w->p->java->userlibray new addjar
+  hibernate3.jar(j1）
+  lib->bytecode生成二进制字节码需要的
+       optional可选的
+       required必须的（ antlr-2.7.6.(j2)
+                        commons-collections-3.1.jar(j3)
+                        dom4j-1.6.1.jar(j4)
+                        javassist-3.9.0.GA.jar(j5)
+                        jta-1.1.jar(j6)
+                        slf4j-api-1.5.8.jar(j7)）
+       添加后自动出现slf4j-api-1.5.8(只是定义了API但是没有具体的实现，所以如需使用要单独下载，
+                                                                      下载后需要的jar文件为slf4j-nop-1.5.8.jar(j8))
+       
+	   使用userlibrary buildpath->addlibrary    
+  mysql数据库驱动mysql-connector-java-3.1.13-bin.jar(j9)
+  
+  hibernate.cfg.xml:
+          database connection settings
+          jdbc connection pool
+          sql dialect-方言，指明hibernate生成具体数据库的时候生成的是mysql还是oracle，，，
+          enable hibernate's automatic session context management
+          disable the second-lebel cache-二级缓存         
+          showsql
+          hbm2ddl.auto是否自动生成建表语句
+   student.hbm.xml
+3. 3.0之后开始支持@（annotation)
+   hibernate-annotation.jar（10）
+   ejb3-persistence.jar符合jpa标准的annotation实现（11）
+   hibernate-comons-annotation.jar反射需要的（12）
+   @Entity javax.persistence.Entity实体
+   @Id加在get方法上，声明主键
+   <mappig class="com.bjsxt.hibernate.model.Teacher"/>
+ 
+11.<property name="hbm2ddl.auto">create</property>
+   
+13.log4j(原来是slf4j,是个标准）
+    (1)去掉slf4j-nop-1.5.8(9)
+    (2)apache-log4j-1.2.15->log4j-1.2.15
+    (3)slf4j-1.5.8->slf4j-log4j12-1.5.8.jar
+    log4j.property 
+15. <property name="show_sql">true</property>
+    <property name="format_sql">true</property>
+16.基础配置：
+   表名类名不一致@Table(name="_Teacher")javax.persistence
+   @Basic 没加注解相当于加了@basic
+   字段名和属性名不同@Column（name=“_name")
+   透明@Transient
+   时间日期类型@temporal(temporalType.Date)  value=可以不写
+                        （temporaltype.time)
+   enum@Enumerated（value="Enumtype.string/ordinary")
+                    string 字符串 ordinary int
+17.字段映射位置
+20.ID生成策略0400id
+             (1)test路径
+             (2)increment:集群下不要使用
+identitym:mysql DB2
+sequence：DB2 oracle
+uuid://跨平台
+native:自动选择sequence或increment//跨平台
+student.hbm.xml <id name="id">
+<generator class="uuid"></generator>
+</id>
+
+21.oracle中不允许表名下划线开头
+   @id
+   @generatedValue:javax.persistence
+                  默认生成策略为auto 相当于native
+annotation/doc/reference/zh_cn/hibernate
+24.联合主键。主键类-StudentPk,实现java.io.Serializable接口。集群化转移内容
+              composit-id name="pk"
+25.  将组件类（teacher-pk）注解为@Embeddable,并将组件的属性getpk注解为@id
+     将组件的属性getpk注解为@Embeddedid
+     在teacher类上@idClass(value=teacherPK.class),联合主键上均加@id
+26.核心开发接口。0500_coreAPI
+               (1)new annotationConfiguration().configure("指定配置文件").buildSessionFactory();
+                                                读取hibernate.cfg.xml->产生跟数据库连接
+               (2)sessionFactory.getCurrentSession()从上下文找，如果已存在，就拿原来的
+                session.getTransaction().commit()提交之前，get的总是相同的session
+                                .openSession（总是打开新的session），需要手动close	
+                两种不能混用，open后get的不同
+27.jta：java transation api thread   transaction manager
+   jta两个数据库,分布式时使用
+28.对象的三种状态transient:内存中有一个对象，没有ID，缓存中也没有
+                 persistent：内存中有，缓存中没有，数据库有
+                 detached：内存有，缓存没有，数据库有
+           session.save(t)
+29.delete:缓存中清除，变为transient状态
+          只要有ID号就可以删除
+       t.setId(2) session.delete(t)
+30.Teacher t=session.load(teacher.class,1);
+   get与load区别，load返回的是代理对象，等到真正用到对象的内容时才发出sql语句
+   get直接从数据库加载，不会延迟
+   t.getclass
+32.update (1)用来更新detached对象，更新完成后未persisent状态
+          (2)更新transient对象会报错
+(3)更新自己设定ID的transient对象可以
+33.saveOrUpdate(1)自动确认是save还是update
+   load(teacher.class,1)
+   load(teacher.class,1)
+   get或load都先查找缓存
+   只发一条select语句，中间加session.clear会发两条
+   t.setName("ttt")
+   flush强制跟数据库同步
+34.SchemaExport
+   在程序中控制生成建表语句
+   new SchemaExport(new AnnotationConfiguration()).creat(false,true)
+35.关系映射。0600onetoone
+     一对一单向外键关联
+     表和表（外键）
+     sorce->sort members->sort all members
+
+     @OneToOne
+@joinColum(name="wifeId“)
+     public wife GetWife(){}
+     powerdesigner
+37.一对一双向外键关联。
+   @OneToOne(mappedBy="wife"):凡是双向关联，必设
+   单双向在数据库区别不大，在java中可以对从w找到h
+   也可以从h找到w
+38.一对一单双向主键关联
+  单向主键关联
+  @PrimaryKeyJoinColum
+39.联合主键
+42.多对一单向关联
+   错误：在一的一方加多的id
+   manytoone默认eager
+44.set<user>
+    onetomany
+47.关联关系的CURD:(默认情况下不会自动保存关联)
+    需要自动保存group中
+  	             @OneToMany(mappedBy="group",
+cascade={CascadeType.ALL})
+user中
+@ManyToOne(cascade={CascadeType.ALL})
+   
+63.软件（面子工程）
+64.虚拟机清除缓存
+   清除内存session.clear
+   关闭连接池，关闭文件（java->c->内存管理器）
+   1+N(面试）creatquery ；ManyToOne（fetch=FetchType.EAGER)本应该只发一条select，结果发出1+N条
+   creatcriteria可解决：关联查询
+   (1)使用LAZY:不完全解决
+   (2)@BatchSize(size=5)
+   (3)join fetch（外连接）   
+65.list_iterate
+   (1)iterate先取id放入缓存，用的时候根据id获取
+   (2)iterate同一session查询只操作一次,会用session查询
+   （炫耀式教学）
+66.一个session不能从另一个session获取记录
+   一级缓存：session级缓存
+   二级缓存：session ALL
+   查询缓存：
+   
+
+
+
+
+
+
+
+
+
+
+
+  
+   

@@ -1,0 +1,248 @@
+https://www.cnblogs.com/zhousysu/p/5483862.html
+http://cmsblogs.com/?p=832
+1.Singleton（单例）
+作用：保证类只有一个实例；提供一个全局访问点
+JDK中体现：
+（1）Runtime
+（2）NumberFormat
+2.Factory（静态工厂）
+作用：
+（1）代替构造函数创建对象
+（2）方法名比构造函数清晰
+JDK中体现：
+（1）Integer.valueOf
+（2）Class.forName
+3.Factory Method（工厂方法）
+作用：子类决定哪一个类实例化
+JDK中体现：Collection.iterator方法
+4.Abstract Factory（抽象工厂）
+作用：创建某一种类的对象
+JDK中体现：
+（1）java.sql包
+（2）UIManager（swing外观）
+5.Builder（构造者）
+作用：
+（1）将构造逻辑提到单独的类中
+（2）分离类的构造逻辑和表现
+JDK中体现：DocumentBuilder(org.w3c.dom)
+6.Prototype（原型）
+作用：
+（1）复制对象
+（2）浅复制、深复制
+JDK中体现：Object.clone；Cloneable
+7.Adapter（适配器）
+作用：使不兼容的接口相容
+JDK中体现：
+（1）java.io.InputStreamReader(InputStream)
+（2）java.io.OutputStreamWriter(OutputStream)
+8.Bridge（桥接）http://www.cnblogs.com/chenssy/p/3317866.html
+作用：将抽象部分与其实现部分分离，使它们都可以独立地变化
+JDK中体现：java.util.logging中的Handler和Formatter
+9.Composite（组合）
+作用：一致地对待组合对象和独立对象
+JDK中体现：
+（1）org.w3c.dom
+（2）javax.swing.JComponent#add(Component)
+10.Decorator（装饰器）
+作用：为类添加新的功能；防止类继承带来的爆炸式增长
+JDK中体现：
+（1）java.io包
+（2）java.util.Collections#synchronizedList(List)
+11.Façade（外观）
+作用：
+（1）封装一组交互类，一致地对外提供接口
+（2）封装子系统，简化子系统调用
+JDK中体现：java.util.logging包
+12.Flyweight（享元）
+作用：共享对象，节省内存
+JDK中体现：
+（1）Integer.valueOf(int i)；Character.valueOf(char c)
+（2）String常量池
+14.Proxy（代理）
+作用：
+（1）透明调用被代理对象，无须知道复杂实现细节
+（2）增加被代理类的功能
+JDK中体现：动态代理；RMI
+15.Iterator（迭代器）
+作用：将集合的迭代和集合本身分离
+JDK中体现：Iterator、Enumeration接口
+16.Observer（观察者）
+作用：通知对象状态改变
+JDK中体现：
+（1）java.util.Observer,Observable
+（2）Swing中的Listener
+17.Mediator（协调者）
+作用：用于协调多个类的操作
+JDK中体现：Swing的ButtonGroup
+18.Template method（模板方法）
+作用：定义算法的结构，子类只实现不同的部分
+JDK中体现：ThreadPoolExecutor.Worker
+19.Strategy（策略）
+作用：提供不同的算法
+JDK中的体现：ThreadPoolExecutor中的四种拒绝策略
+20.Chain of Responsibility（责任链）
+作用：请求会被链上的对象处理，但是客户端不知道请求会被哪些对象处理
+JDK中体现：
+（1）java.util.logging.Logger会将log委托给parent logger
+（2）ClassLoader的委托模型
+21.Command（命令）
+作用：
+（1）封装操作，使接口一致
+（2）将调用者和接收者在空间和时间上解耦合
+JDK中体现：Runnable；Callable；ThreadPoolExecutor
+22.Null Object（空对象）
+作用：不需每次判空，对待空值，如同对待一个相同接口的对象
+JDK中体现：Collections.EMPTY_LIST
+23.State（状态）
+作用：将主对象和其状态分离，状态对象负责主对象的状态转换，使主对象类功能减轻
+JDK中体现：未发现
+24.Visitor（访问者）
+作用：异构的类间添加聚合操作；搜集聚合数据
+JDK中的体现：未发现
+25.Interpreter（解释器）
+作用：用一组类代表某一规则
+JDK中体现：java.util.regex.Pattern
+26.Memento（备忘录）
+作用：保持对象状态，需要时可恢复
+JDK中体现：未发现
+
+
+
+https://blog.csdn.net/u013782203/article/details/52214393
+
+创建型模式：
+(1) 抽象工厂模式(Abstract Factory)
+• java.util.Calendar#getInstance()
+• java.util.Arrays#asList()
+• java.util.ResourceBundle#getBundle()
+• java.net.URL#openConnection()
+• java.sql.DriverManager#getConnection()
+• java.sql.Connection#createStatement()
+• java.sql.Statement#executeQuery()
+• java.text.NumberFormat#getInstance()
+• java.lang.management.ManagementFactory (所有getXXX()方法)
+• java.nio.charset.Charset#forName()
+• javax.xml.parsers.DocumentBuilderFactory#newInstance()
+• javax.xml.transform.TransformerFactory#newInstance()
+• javax.xml.xpath.XPathFactory#newInstance()
+ 
+(2) 建造者模式(Builder)
+• java.lang.StringBuilder#append()
+• java.lang.StringBuffer#append()
+• java.nio.ByteBuffer#put() (CharBuffer, ShortBuffer, IntBuffer,LongBuffer, FloatBuffer 和DoubleBuffer与之类似)
+• javax.swing.GroupLayout.Group#addComponent()
+• java.sql.PreparedStatement
+• java.lang.Appendable的所有实现类
+ 
+(3) 工厂方法模式(Factory Method)
+• java.lang.Object#toString() (在其子类中可以覆盖该方法)
+• java.lang.Class#newInstance()
+• java.lang.Integer#valueOf(String) (Boolean, Byte, Character,Short, Long, Float 和 Double与之类似)
+• java.lang.Class#forName()
+• java.lang.reflect.Array#newInstance()
+• java.lang.reflect.Constructor#newInstance()
+ 
+(4) 原型模式(Prototype)
+• java.lang.Object#clone() (支持浅克隆的类必须实现java.lang.Cloneable接口)
+ 
+(5) 单例模式 (Singleton)
+• java.lang.Runtime#getRuntime()
+• java.awt.Desktop#getDesktop() 
+ 
+结构型模式：
+(1) 适配器模式(Adapter)
+•java.util.Arrays#asList()
+•javax.swing.JTable(TableModel)
+•java.io.InputStreamReader(InputStream)
+•java.io.OutputStreamWriter(OutputStream)
+•javax.xml.bind.annotation.adapters.XmlAdapter#marshal()
+•javax.xml.bind.annotation.adapters.XmlAdapter#unmarshal()
+ 
+(2) 桥接模式(Bridge)
+• AWT (提供了抽象层映射于实际的操作系统)
+•JDBC
+ 
+(3) 组合模式(Composite)
+•javax.swing.JComponent#add(Component)
+•java.awt.Container#add(Component)
+•java.util.Map#putAll(Map)
+•java.util.List#addAll(Collection)
+•java.util.Set#addAll(Collection)
+ 
+(4) 装饰模式(Decorator)
+•java.io.BufferedInputStream(InputStream)
+•java.io.DataInputStream(InputStream)
+•java.io.BufferedOutputStream(OutputStream)
+•java.util.zip.ZipOutputStream(OutputStream)
+•java.util.Collections#checked[List|Map|Set|SortedSet|SortedMap]()
+ 
+(5) 外观模式(Facade)
+•java.lang.Class
+•javax.faces.webapp.FacesServlet
+ 
+(6) 享元模式(Flyweight)
+•java.lang.Integer#valueOf(int)
+•java.lang.Boolean#valueOf(boolean)
+• java.lang.Byte#valueOf(byte)
+•java.lang.Character#valueOf(char)
+ 
+(7) 代理模式(Proxy)
+• java.lang.reflect.Proxy
+•java.rmi.*
+ 
+行为型模式：
+(1) 职责链模式(Chain of Responsibility)
+•java.util.logging.Logger#log()
+•javax.servlet.Filter#doFilter()
+ 
+(2) 命令模式(Command)
+• java.lang.Runnable
+• javax.swing.Action
+ 
+(3) 解释器模式(Interpreter)
+• java.util.Pattern
+• java.text.Normalizer
+• java.text.Format
+• javax.el.ELResolver
+ 
+(4) 迭代器模式(Iterator)
+• java.util.Iterator
+• java.util.Enumeration
+ 
+(5) 中介者模式(Mediator)
+• java.util.Timer (所有scheduleXXX()方法)
+• java.util.concurrent.Executor#execute()
+• java.util.concurrent.ExecutorService (invokeXXX()和submit()方法)
+• java.util.concurrent.ScheduledExecutorService (所有scheduleXXX()方法)
+•java.lang.reflect.Method#invoke()
+ 
+(6) 备忘录模式(Memento)
+•java.util.Date
+•java.io.Serializable
+•javax.faces.component.StateHolder
+ 
+(7) 观察者模式(Observer)
+•java.util.Observer/java.util.Observable
+•java.util.EventListener (所有子类)
+•javax.servlet.http.HttpSessionBindingListener
+•javax.servlet.http.HttpSessionAttributeListener
+•javax.faces.event.PhaseListener
+ 
+(8) 状态模式(State)
+•java.util.Iterator
+•javax.faces.lifecycle.LifeCycle#execute()
+ 
+(9) 策略模式(Strategy)
+• java.util.Comparator#compare()
+• javax.servlet.http.HttpServlet
+• javax.servlet.Filter#doFilter()
+ 
+(10) 模板方法模式(Template Method)
+•java.io.InputStream, java.io.OutputStream, java.io.Reader和java.io.Writer的所有非抽象方法
+•java.util.AbstractList, java.util.AbstractSet和java.util.AbstractMap的所有非抽象方法
+•javax.servlet.http.HttpServlet#doXXX()
+ 
+(11) 访问者模式(Visitor)
+•javax.lang.model.element.AnnotationValue和AnnotationValueVisitor
+•javax.lang.model.element.Element和ElementVisitor
+•javax.lang.model.type.TypeMirror和TypeVisitor

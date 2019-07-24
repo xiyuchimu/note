@@ -1,0 +1,6 @@
+JRockit
+1.BEA公司研发(08年被oracle收购)
+3.专注于服务器端应用
+4.优势
+  --垃圾收集器
+  --MissionControl服务套件

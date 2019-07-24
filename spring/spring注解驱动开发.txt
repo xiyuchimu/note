@@ -1,0 +1,199 @@
+*****容器*****
+
+01.spring注解驱动开发
+
+02.@configration @Bean
+--spring认为所有组件都应该注册在IOC容器中，组件之间通过容器自动装配
+--@configration 告诉spring这是一个配置类
+--@Bean 给容器注册一个Bean;类型为返回值的类型；id为默认方法名
+
+03.@ComponentScan //@ComponentScans
+--<context:component-scan :xml包扫描，多个包用逗号分隔 只要标注了@Controller @Service @Repository(Dao) @Component 就会被扫描到
+--@ComponentScan
+  --(value="com.atguigu") 
+  --(excludeFilters={@Filter(type=FilterType.Annotation,classes={Controller.class})
+  --(includeFilters)
+
+04.@FilterType指定过滤规则(其它几种没记笔记，只记了这一种)
+   --type=FilterType.Custom
+   --implements TypeFilter
+
+05.@Scope("prototype")
+  ("singleton")//默认作用域 ioc容器启动时会创建对象
+  ("prototype")//获取bean时创建对象
+  ("request")
+  ("session")
+  ("global-session")
+
+06.@Lazy
+   --对单实例bean起作用
+   --懒加载，延迟到第一次获取时创建对象
+
+07.@Conditional :过滤规则
+   --可以标在@Bean上 也可以标在@ComponentScan上
+   --applicationContext.getEnveronment.getProperty("os.name")//获取环境变量的值--操作系统
+   --run configration ->VM arguments ->-Dos.name=linux 
+   --@Conditional({WindowsCondition.class})如果WindowsCondition的实现方法返回true，则注入这个bean  
+   
+08.@import 导入bean
+   -- @Import({Dog.class, Cat.class})
+
+09.@import implements 
+ //返回需要导入的组件的全类名数组
+
+10.@Import implements ImportBeanDefinitionregistray//手动注册进容器
+
+11.ColorFactoryBean implements FactoryBean<T> T为需要注册的bean
+   --用Bean注册该FactoryBean 
+   --实际注册进容器的是T
+   --想获取实际ColorFactoryBean在名称前加&
+   
+12.生命周期 @Bean 指定初始化和销毁方法1
+  --xml init-method destroy-method
+  --@Bean(initMethod="")
+  --@Bean(deatroryMethod="")
+  
+13.生命周期 @Bean 指定初始化和销毁方法2
+  --Bean implements InitializingBean
+  --Bean implements DisposableBean
+  
+14.生命周期 @Bean 指定初始化和销毁方法3
+   --@PostConstruct //bean创建完成，并且属性赋值完成
+   --@PreDestroy  //bean 销毁之前 
+   
+15.生命周期 @Bean 初始化前后
+   --实现BeanPostProCessor //覆盖该接口方法。**初始化前后**
+   --实现的方法不能为null，否则不执行后面BeanPost
+   
+16.生命周期 BeanPostProicessor原理
+   --fresh-finishBeanFactoryInitialization-->会在init前后调用15的方法
+            --遍历得到容器中所有的beanPostProcessor
+              --populateBean 属性赋值
+			  --initializeBean
+			      --applyBeanPostProcessorsBeforeInitialization
+				  --invokeInitMethod
+				  --applyBeanPostProcessorsAfterInitialization
+   
+17.生命周期 BeanPostProcessor在Spring底层的使用
+   --InitDestroyAnnotationBeanPostProcessor 处理14的注解
+   --BeanPostProcessor在registerBeanPostProcessors调用
+   --BeanPostProcessor    
+	 --Bean赋值
+	 --@Autowired ：写在成员变量上 通过反射注入 写在set方法上 通过set方法注入
+	 --生命周期注解功能
+	 --Async
+18.属性赋值 @Value
+   --基本数值 @Value("zhangsan")
+   --Spel #{20-2} @Value("#{20-2}")
+   --${}取配置文件中的值@Value("${a.b}")
+19.属性赋值 @PropertySource(value={"classpath:**"})
+   --<context：property-placeholder ..>   
+   --@PropertySources
+
+20.自动装配 spring规范
+  --@Autowired bytype默认，找不到byname(成员变量名) 写在成员变量上 通过反射注入 写在set方法上 通过set方法注入
+    @Autowired(required=false)
+  --@Qualifier("name") 指定需要装配的组件id
+  --@Primary spring自动装配时，默认使用首选的bean。权重小于Qualifier
+
+21.自动装配 java规范
+    --@Resource --默认按照名称装配，没有required=false，@Primary不起作用
+    --@Inject--没有required=false
+
+22.自动装配 @Autowired位置
+    --有参构造器(只有一个有参构造器时省略@Autowired的写法)
+	--成员变量
+	--set方法
+	
+23.自动装配 Aware 注入spring底层组件原理:提供使用spring底层组件的功能
+   --Aware也是通过实现BeanPostProcessor实现的
+   --实现接口ApplicationContextAware-->applicationContext
+   --实现接口BeanNameAware-->当前bean的名字
+   --实现接口EmbeddedValueResolverAwer --文字解析器
+   
+24.自动装配@ProFile 写在类上或bean上
+   --根据当前环境，动态激活和切换一系列组件的功能
+25.自动装配@ProFile 写在类上或bean上
+   --@ProFile("default")默认
+   --VM 加参数激活方式 Dspring.profiles.active=test
+     代码激活方式 
+	 
+	 
+26.小结
+27.AOP-AOP功能测试
+   --@Before("public int com.atguigu.aop.MathCalator.*(..)")
+   --@PointCut("execution("   ")")//本类方法和其它类方法使用
+   --@Aspect告诉spring当前为切面类
+   --@EnableAspectJAutoProxy
+      ==><aop:aspectj-autoproxy>
+   --@AfterReturning(value="pointCut()",returning="result")
+   public void logReturn(Object result)
+   --JoinPoint一定要出现在参数表第一位
+   
+28.@EnableAspectJAutoProxy 原理
+   (1)AnnotationAwareAspectJAutoProxyCreator
+    --@EnableAspectJAutoProxy
+       -->导入AspectJAutoProxyRegistrar---实现ImportBeanDefinitionRegistrar
+          -->调用registerBeanDefinitions(给容器中注册自定义bean)
+				--registerAspectJAnnotationAutoProxyCreatorIfNecessary
+				  -->-->
+				  -->registerOrEscalateApcAsRequired
+				      注册**internalAutoProxyCreator,AnnotationAwareAspectJAutoProxyCreator**
+				  
+   (2)AnnotationAwareAspectJAutoProxyCreator
+       --实现 BeanPostProcessor (bean初始化前后to29)
+	         (1)AbstractAutoProxyCreator.postProcessBeforeInitialization
+             (2)AbstractAutoProxyCreator.postProcessAfterInitialization
+       --实现 BeanFactoryAware 
+	       setBeanFactory==>AbstractAdvisorAutoProxyCreator.setBeanFactory
+		                     -->initBeanFactory()==>AnnotationAwareAspectJAutoProxyCreator.initBeanFactory
+		   
+	   
+29.@EnableAspectJAutoProxy 原理2:registerBeanPostProcessors
+         *****setBeanFactory打断点(也可以在AbstractAutowireCapableBeanFactory类里打断点)
+        1）、传入配置类，创建ioc容器
+  		2）、注册配置类，调用refresh（）刷新容器；
+  		3）、fresh()-->AbstractAutowireCapableBeanFactory.
+		    registerBeanPostProcessors(beanFactory)//注册bean的后置处理器来方便拦截bean的创建；
+  			1）、先获取ioc容器已经定义了的需要创建对象的所有BeanPostProcessor
+  			2）、给容器中加别的BeanPostProcessor
+  			3）、优先注册实现了PriorityOrdered接口的BeanPostProcessor；
+  			4）、再给容器中注册实现了Ordered接口的BeanPostProcessor；
+  			5）、注册没实现优先级接口的BeanPostProcessor；
+  			6）、getBean()//-->AbstractAutowireCapableBeanFactory.doCreateBean() //     注册BeanPostProcessor，实际上就是创建BeanPostProcessor对象，保存在容器中(方法)
+  				创建internalAutoProxyCreator的BeanPostProcessor【 AnnotationAwareAspectJAutoProxyCreator 】
+  				1）、创建Bean的实例
+  				2）、populateBean；给bean的各种属性赋值
+  				3）、initializeBean：初始化bean；
+  						1）、invokeAwareMethods()：处理Aware接口的方法回调
+  						2）、applyBeanPostProcessorsBeforeInitialization()：应用后置处理器的postProcessBeforeInitialization（）
+  						3）、invokeInitMethods()；执行自定义的初始化方法
+  						4）、applyBeanPostProcessorsAfterInitialization()；执行后置处理器的postProcessAfterInitialization（）；
+  				4）、BeanPostProcessor(AnnotationAwareAspectJAutoProxyCreator)//创建成功；--》aspectJAdvisorsBuilder
+  			7）、把BeanPostProcessor注册到BeanFactory中；
+  				beanFactory.addBeanPostProcessor(postProcessor);
+            =======以上是创建和注册AnnotationAwareAspectJAutoProxyCreator的过程========
+  
+  			AnnotationAwareAspectJAutoProxyCreator => InstantiationAwareBeanPostProcessor
+ 		4）、finishBeanFactoryInitialization(beanFactory);完成BeanFactory初始化工作；创建剩下的单实例bean
+  			1）、遍历获取容器中所有的Bean，依次创建对象getBean(beanName);
+  				getBean->doGetBean()->getSingleton()->
+  			2）、创建bean
+  				【 AnnotationAwareAspectJAutoProxyCreator实现InstantiationAwareBeanPostProcessor 在所有bean创建之前会有一个拦截，，会调用 postProcessBeforeInstantiation()】
+ 				1）、先从缓存中获取当前bean，如果能获取到，说明bean是之前被创建过的，直接使用，否则再创建；
+  					只要创建好的Bean都会被缓存起来
+ 				2）、-->***AbstractAutowireCapableBeanFactory.createBean()***;创建bean；
+  					1）、-->resolveBeforeInstantiation(beanName, mbdToUse);解析BeforeInstantiation
+  						希望后置处理器在此能返回一个代理对象；如果能返回代理对象就使用，如果不能就继续
+  						1）、后置处理器先尝试返回对象；
+  							bean = applyBeanPostProcessorsBeforeInstantiation（）//	拿到所有后置处理器，如果是 InstantiationAwareBeanPostProcessor;	就执行postProcessBeforeInstantiation		
+  							if (bean != null) {
+								bean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
+							}
+ 
+  					2）、-->doCreateBean(beanName, mbdToUse, args);真正的去创建一个bean实例；和3.6流程一样；
+  					3）、
+   
+   
+
+  

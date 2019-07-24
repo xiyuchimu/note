@@ -1,0 +1,42 @@
+--在对象中添加一个引用计数器，当有地方引用这个对象的时候，引用计数器的值就+1，
+  当引用失效的时候，计数器的值-1(对象值置空)
+--  -verbose:gc    -XX:+PrintGCDetails
+
+
+引用计数算法(Reference Counting)
+
+    很多教科书判断对象是否存活的算法是这样的：给对象中添加一个引用计数器，每当有一个地方引用它时，
+    计数器值加1；当引用失效时，计数器减1；任何时刻计数器都为0的对象就是不可能再被使用的。
+    引用计数算法的实现简单，判断效率也很高，在大部分情况下它都是一个不错的算法。
+    但是Java语言中没有选用引用计数算法来管理内存，其中最主要的一个原因是它很难解决对象之间相互循环引用的问题。
+    例如：
+    在testGC()方法中，对象objA和objB都有字段instance，赋值令objA.instance=objB及objB.instance=objA，
+    除此之外这两个对象再无任何引用，实际上这两个对象都已经不能再被访问，但是它们因为相互引用着对象方，
+    异常它们的引用计数都不为0，于是引用计数算法无法通知GC收集器回收它们。
+/** 
+ * 执行后，objA和objB会不会被GC呢？ 
+ */  
+public class ReferenceCountingGC {  
+    public Object instance = null;  
+  
+    private static final int _1MB = 1024 * 1024;  
+  
+    /** 
+     * 这个成员属性的唯一意义就是占点内存，以便能在GC日志中看清楚是否被回收过 
+     */  
+    private byte[] bigSize = new byte[2 * _1MB];  
+  
+    public static void main(String[] args) {  
+        ReferenceCountingGC objA = new ReferenceCountingGC();  
+        ReferenceCountingGC objB = new ReferenceCountingGC();  
+        objA.instance = objB;  
+        objB.instance = objA;  
+  
+        objA = null;  
+        objB = null;  
+  
+        //假设在这行发生了GC，objA和ojbB是否被回收  
+        System.gc();  
+    }  
+}  
+https://www.cnblogs.com/suolu/p/6649417.html?utm_source=itdadao&utm_medium=referral

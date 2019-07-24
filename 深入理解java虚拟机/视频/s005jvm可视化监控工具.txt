@@ -1,0 +1,8 @@
+1.jdk->bin->jconsole
+2.堆内存
+    --老年代
+    --新生代
+      --Eden
+      --survivor
+         --
+	 --

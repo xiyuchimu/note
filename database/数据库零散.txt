@@ -1,0 +1,29 @@
+ count（1）和count（*）之间没有区别，因为count（*）count（1）都不会去过滤空值，
+ 但count（列名）就有区别了，因为count（列名）会去过滤空值。
+ 事务特性：
+   原子性（Atomicity）、一致性（Consistency）、隔离性（Isolation）、持续性（Durability）简称ACID。
+ 
+ 
+ pan.baidu.com/s/1eSk1tN8
+ 事务隔离级别
+--读未提交。脏读、不可重复读、幻读都会发生。
+
+--提交。脏读不会发生，不可重复读、幻读都会发生。
+
+--可重复读。脏读、不可重复读都不会发生，幻读会发生。
+
+--可串行化。脏读、不可重复读、幻读都不会发生。
+
+
+事务传播行为就是多个事务方法相互调用时，事务如何在这些方法间传播。spring支持7种事务传播行为：
+
+propagation_requierd：如果当前没有事务，就新建一个事务，如果已存在一个事务中，加入到这个事务中，这是最常见的选择。
+propagation_supports：支持当前事务，如果没有当前事务，就以非事务方法执行。
+propagation_mandatory：使用当前事务，如果没有当前事务，就抛出异常。
+propagation_required_new：新建事务，如果当前存在事务，把当前事务挂起。
+propagation_not_supported：以非事务方式执行操作，如果当前存在事务，就把当前事务挂起。
+propagation_never：以非事务方式执行操作，如果当前事务存在则抛出异常。
+propagation_nested：如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则执行与propagation_required类似的操作
+
+
+读未读已 可重可串

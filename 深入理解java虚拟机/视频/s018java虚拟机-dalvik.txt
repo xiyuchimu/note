@@ -1,0 +1,3 @@
+1.不是一个java虚拟机，因为它没遵循java规范
+2.与java有很大联系
+3.执行Dex(dalvik Executalbe)文件，可从class文件转化而来

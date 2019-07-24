@@ -1,0 +1,18 @@
+1.简介（结构图）
+---primary concerns
+--authentication：认证->登录
+--authorization：授权
+--session management
+--cryptography 加密
+---sipporting features
+--web support
+--caching
+--concurrency 
+--testing
+--run As:已登录用户以其他身份操作
+--remember me:
+shiro架构
+ application code-->subject--shiro securitymanager->realm
+2.
+
+用户权限角色

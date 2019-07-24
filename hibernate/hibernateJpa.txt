@@ -1,0 +1,9 @@
+1.jpa的概念及它和hibernate之间的关系
+  --jpa：java persistence api java持久化规范
+  --先有hibernate sun公司统一规范（sun公司后被oracle收购）
+  --hibernate有自己独有的orm操作方式，也有jpa的方式
+2.jpa的环境搭建及入门案例
+3.jpa的crud操作（单表）
+4.jpa中实现一对多映射配置及操作
+5.jpa中实现多对多映射配置及操作
+6.基于jpa的映射配置和hibernate操作组合使用

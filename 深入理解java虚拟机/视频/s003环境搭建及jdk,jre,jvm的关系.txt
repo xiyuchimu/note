@@ -1,0 +1,6 @@
+1.jdk包含jre包含jvm
+2.jdk：java development kit
+  jre：java runtime environment
+  java virtual machine
+3.RIA:(富英特网应用程序)富客户端应用程序
+  

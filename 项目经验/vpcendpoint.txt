@@ -1,0 +1,12 @@
+Nova - 计算服务
+Neutron-网络服务
+Swift - 对象存储服务
+Cinder-块存储服务
+Glance - 镜像服务
+Keystone - 认证服务
+Horizon - UI服务
+Ceilometer-监控服务
+Heat-集群服务
+Trove-数据库服务
+
+cloudMan: https://mp.weixin.qq.com/s/QtdMkt9giEEnvFTQzO9u7g

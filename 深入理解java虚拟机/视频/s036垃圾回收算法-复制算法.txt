@@ -1,0 +1,11 @@
+https://blog.csdn.net/sinat_36246371/article/details/53002209
+ -堆
+  --新生代
+    ---Eden(新创建的对象)80%
+    ---Survivor1,survivor 存活区10%
+    ---Tenured Gen 10%
+  --老年代
+    ---
+
+
+内存担保

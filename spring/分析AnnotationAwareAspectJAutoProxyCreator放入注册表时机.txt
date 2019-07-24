@@ -1,0 +1,67 @@
+@EnableAspectJAutoProxy实际注册了AnnotationAwareAspectJAutoProxyCreator
+AnnotationAwareAspectJAutoProxyCreator
+  			->AspectJAwareAdvisorAutoProxyCreator
+  				->AbstractAdvisorAutoProxyCreator
+  					->AbstractAutoProxyCreator
+  							implements SmartInstantiationAwareBeanPostProcessor, BeanFactoryAware
+
+
+BeanFactoryPostProcessor :postProcessBeanFactory()
+  --BeanDefinitionRegistryPostProcessor:postProcessBeanDefinitionRegistry()
+    --ConfigurationClassPostProcessor
+	--MyBeanDefinitionRegistryPostProcessor
+  
+  
+  1.分析AnnotationAwareAspectJAutoProxyCreator放入注册表时机
+      即class AspectJAutoProxyRegistrar implements
+	           ---ImportBeanDefinitionRegistrar registerBeanDefinitions执行时机
+  
+  
+简写
+  BDRPP:BeanDefinitionRegistryPostProcessor:
+  pPBDDR():postProcessBeanDefinitionRegistry()
+  
+refresh
+invokeBeanFactoryPostProcessors
+   1.直接调用PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(Instantiate and invoke all registered BeanFactoryPostProcessor beans,)
+invokeBeanFactoryPostProcessors//遍历 BDRPP @see11
+   1.执行已有 BDRPP 的 pPBDDR()
+   4. getBean所有PriorityOrdered的 BDRPP 得到 ConfigurationClassPostProcessor
+invokeBeanDefinitionRegistryPostProcessors
+   1.遍历 BDRPP 的 pPBDDR()，即执行 ConfigurationClassPostProcessor.pPBDDR()
+   
+   
+========以上是ConfigurationClassPostProcessor.pPBDDR()===执行时机
+  
+pPBDDR()
+   1.
+processConfigBeanDefinitions
+   1.this.reader.loadBeanDefinitions(configClasses);//configClasses=MainOfAOP
+loadBeanDefinitions
+loadBeanDefinitionsForConfigurationClass//从configclass里取出
+   1.loadBeanDefinitionsFromImportedResources(configClass.getImportedResources());
+   2.loadBeanDefinitionsFromRegistrars(configClass.getImportBeanDefinitionRegistrars());
+           configClass.getImportBeanDefinitionRegistrars()==>AspectJAutoProxyRegistrar
+loadBeanDefinitionsFromRegistrars//
+   1.AspectJAutoProxyRegistrar.registerBeanDefinitions
+registerBeanDefinitions
+   --注册AopConfigUtils.registerAspectJAnnotationAutoProxyCreatorIfNecessary(registry);
+          registry.registerBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME, beanDefinition);//internalAutoProxyCreator
+
+
+
+
+refresh()之前this()注册
+org.springframework.context.annotation.internalConfigurationAnnotationProcessor,ConfigurationClassPostProcessor
+
+
+
+
+
+
+
+
+
+
+
+

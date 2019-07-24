@@ -1,0 +1,20 @@
+--权限分类
+    系统权限：系统规定用户使用数据库的权限（系统权限是对用户而言）
+       -DBA:拥有全部特权，是系统最高权限，只有DBA才可以创建数据库结构
+       -RESOURCE：拥有Resource权限的用户只可以创建实体，不能创建数据库结构
+       -CONNECT：用有connect权限的用户只可以登录Oracle，不可以创建实体，不可以创建数据库结构
+    系统权限只能有DBA用户授处：sys，system
+    实体权限：么欧中权限用户对其他用户的表或试图的存取权限（是针对表或试图而言的）
+
+
+grant权限名称to用户 撤销 revoke权限名称from用户
+GRANT debug any procedure, debug connect session TO USERXXX;  
+
+查询用户拥有哪里权限： 
+SQL> select * from dba_role_privs;
+SQL> select * from dba_sys_privs;
+SQL> select * from role_sys_privs; 
+查自己拥有哪些系统权限
+SQL> select * from session_privs; 
+删除用户
+SQL> drop user 用户名 cascade;  //加上cascade则将用户连同其创建的东西全部删除

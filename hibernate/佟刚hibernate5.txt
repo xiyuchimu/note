@@ -1,0 +1,140 @@
+1-3
+(1)什么是框架
+  写程序，使用框架之1后，帮我们实现一部分功能，使用框架好处是可以帮我
+  们少写一部分代码实现功能
+(2)hibernate
+  对jdbc进行封装
+(3)hibernate 开源（免费）轻量级（依赖少）框架
+(4)hibernate版本
+  4是过度版本
+1-4
+(1)web阶段叫javabena 
+(2)orm object relation mapping
+   实体类和数据库表进行一一对应关系
+   实体类字段和表对应
+   不需要直接操作数据库表，直接操作实体类
+(3)jdbc
+   加载驱动
+   创建连接
+   对sql进行预编译
+   执行sql查询
+   遍历结果
+   释放资源
+1-5
+(1)hibernate本身不支持日志输出slf4j-api,s-log4j,log4j
+(2)hibernate要求实体类有一个属性唯一的（id）
+1-6
+(1)xml文件
+   ---引入约束dtd
+1-7 hibernate.cfg.xml
+(1)///指本地数据库
+(2)类路径，文件路径
+1-10
+（1）colum可以不写，默认跟name相同
+（2）type（字段类型 int，，） 自动对应
+1-11 核心api
+（1）configuration 加载核心配置文件
+（2）sessionFactory 中做的事情
+    根据核心配置文件，创建表。
+    创建sessionFactory 过程中，这个过程非常耗费资源
+    解决方式：静态代码块
+（3）session 
+     可以调用session中的方法crud
+     单线程：不能公用，只能自己用
+（4）transaction 
+    开启事务
+    提交事务
+    回滚
+2*********************************
+1.hibernate实体编写规则
+ --成员变量是私有的
+ --set，get方法
+ --有id
+ --不建议使用基本类型，建议为包装类（可以为null）
+2.主键生成策略generator
+ --native（根据所用数据库自动选择自增策略）
+ --increment
+ --sequence
+ --uuid（字符串）
+3.实体操作
+ --查询：
+     obj1=session.get(obj.class,arg2)//arg1实体类，arg2 id值
+ --删除：
+     查询，返回对象
+ --修改：
+     查询，返回对象obj1
+     session.update(obj1);
+ --save
+ --saveOrUpdate：
+ --实体状态
+   瞬时态：无id，没跟session关联
+   持久态：
+   游离态：
+4.缓存
+  数据存到数据库里面，数据库本身是文件系统，使用流方式操作文件效率不是很高
+  把数据存在内存中，可以直接在内存中取数据，调高读取效率
+  --一级缓存
+      （1）一级缓存是默认打开的。
+      （2）使用范围：session范围，创建session到关闭session
+      （3）存储的数据必须是持久态数据
+      （4）验证
+      （5）执行过程
+           --在一级缓存中查询
+	   --如果有返回
+	   --如果没有去hibernate查询，并将返回的持久态对象放入
+	     一级缓存
+	   --在缓存中存储的并不是整个对象，而是key为id，value为
+	     value的形式
+       (6)一级缓存特性：一级缓存会自动更新数据库。
+                      自动更新执行过程：
+		      --一级缓存中有快照区（副本）
+		      --属性更改时更改一级缓存，而不会更改快照区
+		      --提交事务的时候，一级缓存中内容和快照区内容是
+		      否相同，如果不同，更新数据到数据库。
+
+  --二级缓存
+      （1）目前已不适用，替代技术为redis
+      （2）二级缓存默认不打开
+      （3）使用范围：sessionFactory范围
+
+5.事务操作
+  （1）出错回滚
+6.其他的sql
+ （1）Query对象查询所有记录:不需要写sql，需要写hql
+      1）hql与普通sql相似但有区别
+      2）sql操作的是数据库表和字段，hql操作的是
+          实体类和类中的属性
+      3）使用
+        Query query = session.createQuery("from Teacher");
+		List<Teacher> tl= query.list();
+		for(Teacher t:tl){
+			System.out.println(t.getName());
+		}
+ （2）Critica：不需要写语句
+        1）Criteria c = session.createCriteria(Teacher.class);
+		List<Teacher> tl=c.list();
+		for(Teacher t:tl){
+			System.out.println(t.getName());
+		}
+ （3）SQLQuery：调用普通sql
+     1）SQLQuery sqy=session.createSQLQuery("select * from teacher");
+		sqy.addEntity(Teacher.class);
+		List<Teacher> tl=sqy.list();
+		for(Teacher t:tl){
+			System.out.println(t.getName());
+		}
+3.******************************************************************
+1.表与表关系
+2.hibernate一对多
+  (1)映射配置
+  (2)级联操作
+  (3)manyToOne  取many一方时，默认取到one一方
+     oneToMany  取one一方时，默认不取many一方
+     Fetch:Eager
+     Lazy:Lazy
+     --两种方式会导致读数据的时机有区别
+     load和get的区别
+     load是用到的时候取
+     get是立即取
+     
+3.hibernate多对多

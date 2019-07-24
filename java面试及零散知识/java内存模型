@@ -1,0 +1,81 @@
+一、为什么栈比堆快
+https://blog.csdn.net/maochengtao/article/details/8840690
+1.在栈上分配的内存系统会自动释放
+2.栈是计算机系统提供的数据结构，计算机会在底层对栈提供支持：分配专门的寄存器存放栈的地址，压栈和出栈都有专门的指令执行。而堆是c/c++函数库提供的，机制复杂，例如为了分配一块内存，库函数会按照一定的算法在内存中搜索可用的足够大的空间，如果没有足够大小的空间，就有可能调用系统功能区增加程序数据段的内存空间，然后进行返回
+3.访问时间，堆需要访问两次，栈只需要访问一次
+https://zm10.sm-tc.cn/?src=l4uLj4zF0NCIiIjRnJGdk5CYjNGckJLQnJeWkZ6MkJmL0J6NnJeWiZrQzc%2FOzdDOztDNzNDNyMfLyc3J0ZeLkpM%3D&uid=fe28954c6f5ebe1c67398b126a5c0975&hid=78891aff172a49bbbcf70f674afed8b7&pos=4&cid=9&time=1530421650971&from=click&restype=1&pagetype=0020004000000402&bu=news_natural&query=%E6%A0%88%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BF%AB&mode=&v=1&force=true&wap=false&uc_param_str=dnntnwvepffrgibijbprsvdsdichei
+1.java自动管理栈和堆
+2.堆是一个运行时数据区
+3.堆得优势是可以动态分配内存大小，生存期不必告诉编译器
+4.栈数据是共享的，缺点是，存在栈中的数据大小与生存期必须是去的定的
+5.栈中主要存放一些基本类型变量和对象句柄
+6.栈中数据占内存大小一般在编译时是确定的，比如int占4b
+https://www.jianshu.com/p/770d279bb531
+1.栈是有cup提供指令支持的
+
+
+栈是本着LIFO原则的存储机制
+
+
+寄存器、缓存、内存、硬盘、存储器的区别
+https://blog.csdn.net/heixiaolong7/article/details/51226378
+1.只要能存储数据的器件都可以称之为存储器，它的含义覆盖了寄存器，缓存，内存，硬盘。cpu访问快慢的速度依次为 寄存器-> 缓存->内存->硬盘
+2.寄存器是中央处理器的组成部分，是一种直接整合到cpu中的有限的高速访问速度的存储器，
+3.缓存其实是内存中高速缓存（cache）
+4.硬盘、U盘等存储器都归入外存储器
+5.内存、内存条
+
+
+register虚拟机stack虚拟机
+https://techsingular.net/2013/04/06/%E4%BB%80%E4%B9%88%E6%98%AF%E5%AF%84%E5%AD%98%E5%99%A8/
+
+
+java方法区介绍
+https://blog.csdn.net/huangfan322/article/details/53220169
+1.jvm内存模型
+ 大多数JVM将内存分配为Method Area(方法区)、Heap(堆)、Program Counter Register(程序计数器)、JAVA Method Stack(JAVA方法栈)、Native Method Stack(本地方法栈)。
+2.类型信息，类型的常量池，字段信息，方法信息，类变量，指向类加载器的引用，
+指向class实例的引用，方法表
+ 
+ 
+方法区 运行时常量池(Runtime Constant Pool)
+https://www.cnblogs.com/xiaotian15/p/6971353.html
+1.Class文件中的信息常量池和运行时常量池的区别
+2.class文件结构
+3.常量池存放两大类常亮
+4.常量池好处
+5.基本类型的包装类和常量池
+6.i4 == i5 + i6自动拆箱
+7.常量池普通方法赋值
+  “abce”与new String（abcd）
+  连接表达式+纯引号的方式与"abcd"相同
+  字符串变量+ 与new String 方式相同
+8.常量池静态方法赋值
+9.String与常量池－intern方法
+10.String s1 = new String("xyz");
+https://www.cnblogs.com/wangguoning/p/6109377.html
+
+
+方法区堆class类的引用
+https://www.cnblogs.com/wangguoning/p/6109377.html
+
+
+java并发编程
+https://www.cnblogs.com/dolphin0520/category/602384.html
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

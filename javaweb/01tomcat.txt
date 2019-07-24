@@ -1,0 +1,22 @@
+1.java web：java web是由一组servlet，html，类，以及其它的可以被绑定的
+           资源构成。它可以在各种供应商提供的实现servlet规范的servlet
+	   容器中运行
+2.servlet是运行在服务器上的java类（本质是java类）
+3.servlet容器：servlet容器为javaWeb应用提供运行时环境，它负责管理
+             servlet和jsp的生命周期，以及管理他们的共享数据
+	     servlet容器也称为javaWeb应用容器，或者servlet/jsp容器
+4.tomcat是一个免费的开放源代码的serlet容器，它是Apache软件基金会的
+  一个顶级项目，由apache，sun和其它一些公司及个人共同开发而成，由于
+  有了sun公司的参与，最新的servlet和jsp规范总能在tomcat中得到体现
+5.tomcat目录结构
+  --bin：可执行文件
+  --conf：配置文件
+  --lib：第三方依赖的jar包
+  --logs：日志
+  --temp：临时文件
+  --webapps：项目部署
+  --work：jsp翻译成java，session持久化的ser文件
+          编译的class文件
+6.若已经启动一个tomcat应用，再启动同一个，会抛出异常：
+  Address already in use：jvm_bind:8080
+7.修改tomcat端口号：config/server.xml

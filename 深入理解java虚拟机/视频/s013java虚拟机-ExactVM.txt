@@ -1,0 +1,5 @@
+Exact VM
+  --Exact Memory ManageMent准确式内存管理(可判断数据对象类型--方便回收)
+  --编译器和解释器混合工作以及两级即时编译器
+  --只在Solaris平台发布
+  --jdk1.2之前使用

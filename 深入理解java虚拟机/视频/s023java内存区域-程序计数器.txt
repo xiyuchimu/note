@@ -1,0 +1,17 @@
+程序计数器
+1.程序计数器是一块较小的内存空间，它可以看做是当前线程所执行的
+  字节码的行号指示器
+2.程序计数器处于线程独占区(每一个线程都有程序计数器)
+3.如果线程执行的是java方法，这个计数器记录的是正在执行的虚拟机字节码
+  地址，如果执行的是native方法，这个计数器的值是undefined
+4.此区域是唯一一个在java虚拟机规范中没有规定任何OutOfMemoryError情况
+  的区域(开发者不需要操作程序计数器)
+  
+public class Hello{
+  public void static void main(String []args){
+    int a=10;
+    int b=20;
+    syso(a+b)
+  }
+}
+ goto:java 保留字(java未使用，以后可能会用)

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<mxGraphModel dx="1106" dy="643" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#ffffff">
+    <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" value="" style="shape=process;whiteSpace=wrap;html=1;strokeWidth=11;" vertex="1" parent="1">
+            <mxGeometry x="180" y="140" width="120" height="60" as="geometry" />
+        </mxCell>
+    </root>
+</mxGraphModel>
+
+
+1.从style可以看出来样式其实是保存在xml中的，那其余信息(例如绑定信息)如何保存？
+2.

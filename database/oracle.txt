@@ -1,0 +1,658 @@
+一、Oracle数据库的安装
+1.甲骨文
+2.关系型数据库：RDBMS
+3.09年收购sun公司
+5.MCA OCP OCM认证
+6.oracle数据库是一种网络上的数据库：他在网络上支持多用户，支持客户端/服务端等部署
+7.客户机和服务机的关系
+8.oracle数据库：一个相关的操作系统文件（即存储在计算机硬盘上的文件）的集合
+	       ，这些文件组织在一起，成为一个逻辑整体，即为Oracle数据库
+	       (1)Oracle用来存储和管理相关的信息，Oracle数据库必须要与内存里实例合作，才能对外提供数据管理服务
+  Oracle实例：位于物理内存里的数据结构，它由操作系统的多个后台进程和一个共享的内存池组成，共享内存池可以被所有的进程访问
+	     (1)Oracle用他们来管理数据库访问，用户如果要存取数据库（也就是硬盘上的文件）里的数据，必须通过Oracle实例才能实现，
+	     不能直接读取硬盘上的文件
+	     (2)实际上，Oracle实例就是平常所述的数据库服务（service)
+  区别：实例可以操作数据库；在任何时刻，一个实例只能与一个数据库关联，访问一个数据库；而同一个数据库可有多个实例访问
+9.触发器，存储过程，游标，plsql....
+10.重新配置监听程序Listener（主机，端口号，全局数据库名，oracle主目录
+二、Oracle数据库管理
+1.sqlplus
+2.pls/ql developer
+3.Myobjects-->Tables
+4.oracle企业管理器“创建”bug
+5.通过Atguigu用户无法访问Scott用户创建的表
+6.对象：oracle中的各个用户。（添加权限select等）然后可以select *from scott.department
+  系统：atguigu用户没有创建表的权限，可在系统里添加。管理权限：是否可以被其它用户使用
+  限额：”表空间users无权限“ 
+7.text Edit
+
+三、第1节--基本的sql select语句
+1.大处着眼，小处着手。学习知识时，要知道自己学习的知识是知识体系的哪一部分。学后细节上要练
+2.sql语句类型--
+            DML：（Data Manipulation language），
+                   数据操纵语言：insert updata delete select
+            DDl：（Data Definition Language），
+	           数据定义语言：create  Table，
+				 alter Table，
+				 Drop Table，
+				 Create Index，
+				 DropIndex
+	        DCL：（Data Control language），
+	           数据控制语言--GRANT:授予访问权限
+	                --REVOKE:撤销访问权限
+			--COMMIT:提交事务处理
+			--ROLLBACK:事务处理回退
+			--SABEPOINT:设置保存点
+			--LOCK:对数据库特定部分进行锁定
+3.des employees；
+4.sql语句大小写不敏感，
+  sql可以写一行，也可以写多行
+  关键字不能缩写也不能分行
+5.数字（number）和日期（data）可以使用算数运算符
+  select 8*4 from dual；
+  select last_name   ,salary*12+100 from employees;
+  select sysdate,sysdate+1 from dual;
+  日期可以做加减，不能做乘除
+6.注释：--
+  空值：空值是无效的，未指定的，未知的或不可预知的值。
+        空值不同于0；凡是空值参与的运算，结果都为空（null）
+7.列的别名
+  （1）字段后加空格
+  （2）字段后加 as
+  （3）加双引号，显示结果可以区分大小写及空格，无双引号默认全部大写
+8.连接符：（java中的+）
+  （1）用列与列，列与字符连接在一起
+  （2）用“||”表示
+  （3）可以用来’合成‘列
+    --select last_name||'`s job_id is'||jcb_id as details from employee
+    sql仅别名使用双引号，其余都使用单引号表明是字符串
+9.重复行：默认情况下会返回所有行，包括重复行
+  select distinct department from employees
+10.sql与sql*plus区别
+   sql：一种语言，关键字不能缩写，使用语句空值数据库中的表的定义信息和表中的数据
+   sql*plus：一种环境，oracle的特性之一，关键字可以缩写（desc：sql*plus的关键字而不是sql的关键字）
+   sql是一种语言，mysql是数据库
+四.第1节课后练习
+1.“缺失表达式” 
+2.标点符号需要是英文格式的
+3.desc：显示表的结构
+五、六过滤和排序数据
+1.字符和日期要包含在单引号中
+2.sql 不区分大小写指的是字符串外的情况
+3.（1）>=
+   (2)between ... and ...
+4.select * from employees 
+           where last_Name='Higgins'//区分大小写
+	   where hire_date='7-6月-1994' //日期格式严格要求
+	   where salary between 4000 and 7000; //含边界
+	   where department_id=90
+	   where department_id=80 or department_id =70
+	   where department_id in(70,80)
+	   where last_name like '%a%' //名字含有a
+	   where last_name like '_a%' //名字第二个字符为a
+	   where last_name like '_ _a%'// 第二个字符为空，第四个字符为a
+	   where last_name like '%_%'//名字中有字符
+	   where last_name like '%\_%' escape '\' //转义字符
+	   where last_name like '%#_$' escape '#' //转义字符
+	   where commission_pct is null;//
+	   where commission_pct is not null;//not 不走索引
+	   where department_id=80 
+	         order by salary dsc;//反序
+		 order by salary asc;//正序
+		 order by salary//默认正序
+		 order by salary nasc,last_name dsc//多层排序
+	   where salary not between 500 and 1200；
+	   where to_char(hire_date,'yyyy-mm-dd') between '1998-02-01' and '1998-02-02'
+ 	   where to_char(hire_date,'yyyy')=='1994'
+七、单行函数
+(一)sql函数
+  1.字符型
+     大小写控制：lower、upper、initcap
+     字符控制:concat,substr,length,instr('helloword','w');
+  2.数值型
+  3.转换型
+
+  select lower('ASDsa dSSADF'）,
+         upper('ASDsad SSADF'),
+         initcap('as DD') from 
+         dual;
+  select * from employees where lower(last_name) =''
+  ------字符函数-------
+  select concat('hello','world),
+         substr('helloword',2,4),
+	 instr('hellojava','j'),
+	 instr('hhhhhhh','j'),
+	 lpad(salary,10,'*'),
+	 rpad(salary,10,'*'),
+	 lpad(salary,10,' '),
+	 trim('h' from 'hhhhellowordhh'),
+	 trim('h' from 'hhhellghhhhwirdhh'),
+	 repalace('abcd','b','m');
+	 from dual;
+  ------------数值函数------
+  select round(435.45,2),
+         round(435.45),
+	 round(435.45,-2),
+	 trunc(435.45,1),
+	 trunc(435.45),
+	 trunc(435.45,-1),
+	 mod(1100,100),
+	 mod(1000,3),
+	 mod(11,0)
+	 from dual;
+  -----------时间函数--------
+  select sysdate+1,
+       sysdate-1,
+       sysdate-hire_date,
+       (sysdate-hire_date),
+       months_between(sysdate,hire_date),
+       add_months(sysdate,100),
+       next_day(sysdate,'星期日'),
+       last_day(sysdate),
+       round(sysdate,'MONTH'),
+       round(sysdate,'year'),
+       round(sysdate,'yyy'),
+       round(sysdate,'mm'),
+       round(sysdate,'dd'),
+       round(sysdate,'hh'),
+       round(sysdate,'mi'),
+       round(sysdate,'ss'),
+       trunc(sysdate,'month'),
+       trunc(sysdate,'year')
+       from employees;
+  select last_name,hire_date
+         from employees
+	 where hire_date=last_day(hire_date-1),
+
+  ----------转换函数-------
+  --隐式转换函数
+  select '12'+2,
+         sysdate+2,
+	 from dual;
+  --显式转换函数
+  select 123,354,156+2 from dual;
+  select hire_date 
+	 from employees
+         where hire_date='7-6月-94’,
+	 where to_char(hire_date,'yyyy-mm-dd')='1994-1-1',
+	 where to_date('1994-06-07','yyyy-mm-dd')=hire_date
+	 where to_char(hire_date,'yyyy"年"mm"月"dd"日"')='1994年01月01日'
+  select to_char(123456798,89,'999,999,99'), 
+         to_char(1234567.132,'000,000,99'),
+	 to_char(1234657.89,'$000,000,999'),
+	 to_char(1234565.89,'L000,000,999'),
+	 to_number('Y001,234,567,89','L000,000,999')
+	 from dual;
+八、2018/3/10日早
+  ----------通用函数-----
+  select 
+         ----nvl,nvl2
+         salary*12*(1+nvl(commission_pct,0))//为空时，用0代替
+         nvl(department_id,'没有部门')//类型不一样，执行不成功
+	 nvl(to_char(department_id,'99999'),'没有部门'),
+	 nvl(to_char(department_id),'没有部门'),
+	 nvl2(commission_pct,commission_pct+0.1,0.1),
+	 nullif(expr1,expr2)//相等返回null，不等返回expr1
+	 coalesce(null,null,null,1)//
+	 ----条件表达式 if-then-else
+	 ---case：
+	 --简单Case函数 
+             CASE sex  
+             WHEN '1' THEN '男'  
+             WHEN '2' THEN '女'  
+             ELSE '其他' END 
+	 --Case搜索函数 
+	     CASE
+	     WHEN sex = '1' THEN '男'  
+	     WHEN sex = '2' THEN '女'  
+	     ELSE '其他' END  
+	 employee_id, 
+	      case department_id
+	      when 10 then salary*1.1
+	      when 20 then salary*1.2
+	      else salary*1.3 end "new_sal"
+	 employee_id, 
+	      case department_id
+	      when 10 then salary*1.1
+	      when 20 then salary*1.2
+	      else salary end new_sal
+	 ---decode
+	 decode(department_id,10,salary*1.1,
+	                      20,salary*1.2,
+			      salary)new_sal
+	  
+九、
+
+十、多表查询
+select 
+       department_id from department,employees;//未明确定义列
+       employees.department_id from department,employees;//笛卡尔积
+       ----内连接：合并具有同一列的两个以上表的行，
+                   结果集中不包含一个表与另一个表不匹配的行
+      
+          ----避免笛卡尔积 等值连接
+          where employees.department_id=department.department_id;
+          select 
+          employee_id,e.department_id,department_name 
+          from employees e,departments d
+          where e.department_id=d.deparment_id//连接n个表至少需要n-1个连接条件
+          ----避免笛卡尔积  非等值连接
+          where e.salary between j.lowest_sal and j.highest_sal
+       ----外连接：两个表在连接过程中除了返回满足连接条件的行，
+                   还返回左或右表不满足条件的行。
+		   没有匹配的行时，结果表中响应的列为空
+		   外连接的where子句类似于内部连接，但连接条件中没有匹配行的表的列后面要加外连接运算符（+）
+	   **左外连接
+	   where e.department_id=d.department_id(+)
+	   **右外连接
+	   where e.department_id(+)=department_id
+	   不允许左右都有外连接运算符
+       ----sql连接
+       from employees cross join departments//
+       from employees native join departments//自动连接并避免笛卡尔积
+                                             //所有列名相同的列都默认取等
+       from employees join department using(department_id)//必须两个表列明必须相同，数据类型也必须相同
+       from employees e join department d
+                        on e.department_id =d.department_id
+			join location l
+			on d.location_id =l.location_id  //相当于where =
+       from employees e right outer join departments d
+                                   on
+       from employees e left outer join department d
+                                   on
+       from employees e full outer join department d
+                                   on
+       ---自连接
+十一、
+十二、分组函数
+ avg、count、max、min、stddev、sum、distinct
+ select avg(salary),max(salary),min(salary),sum(salary),count(salary)
+ select count(commission_pct) //仅计算非空的结果，avg也忽略空值
+ select count(nvl(commission_pct,pct,0)) from employees;
+ select distinct department_id from employees
+ select distinct department_id,avg(salary) from employees group by department_id****组函数计算每组数据
+ select department_id,job_id,avg(salary) from employyess group by department_id,job_id**d多层分组
+ ///////select 中的其余字段应在group by 后出现
+ 不能在where 子句中使用组函数 如错误示例 where avg(salary),
+ 所以使用having having 不必须紧邻from
+ select max(avg(salary)) from employees group by department
+ 十三、
+ 十四、子查询  2018年3月10日 14:36:21
+   ---使用EXISTS，Oracle会首先检查主查询，然后运行子查询直到它找到第一个匹配项，这就节省了时间。
+   ---Oracle在执行IN子查询时，首先执行子查询，并将获得的结果列表存放在一个加了索引的临时表中。
+   ---在执行子查询之前，系统先将主查询挂起，待子查询执行完毕，存放在临时表中以后再执行主查询。
+    select last_name,salary from employees where salary>(
+           select salary from employees where last_name='Albel')
+    --子查询要包含在括号内，通常写在等号右边
+    select * from employees where salary=(
+            select min(salary) from employees)
+    --非法使用子查询:子查询中有多条记录
+    select employee_id,last_name from employees where salary=(
+           select min(salary) from employees group by department_id)
+    ---非法使用子查询：子查询中的空值问题
+    --多行子查询
+    in、any、all
+    ---select employee_id,last_name,salary from employees where job_id<>'IT_PROG' and
+              salary<any(select salary from employees where job_id='IT_PROG')
+十七、创建和管理表ddl:数据定义语言
+1.--表：基本数据存储集合，由列和行组成
+  --视图:从表中抽出的逻辑上相关的数据集合views
+  --序列：提供有规律的视图（表的主键一般用序列实现）sonoyms
+  --索引：提高查询效率index
+  --同义词：给对象起名（非  别名）
+  //查询用户定义的表
+  select table_name from user_tables
+  //查看用户定义的各种数据库对象
+  select distinct object_type from user_objects;
+  //查看用户定义的表，视图，同义词和序列
+  select * from user_catalog;
+2.创建表
+  (1)创建表的第一种方式
+  creat table emp1(
+        id number(10),--最大为十个9
+	name varchar2(20),--mysql中未varchar
+	salary number(10,2),
+	hire_date date
+   )
+  (2)创建表的第二种方式：依托于现有表，现有数据也被导入了.
+                         如不想要数据将where 3= 2条件限制为空
+     create table emp2
+     as 
+     select employee_id id,last_name name,hire_date ,salary from employees;
+     ---------
+3.修改表
+  (1)增加列
+   alter table emp1
+         add(email varchar2(20))
+  (2)modify 修改列
+     alter talble emp1
+         modify(id number(15))//修改数据长度
+     alter table emp1
+         modify(salary number(20,2) default 2000)//增加默认值
+     alter table emp1
+         modify(emal number(15))//修改数据类型（已有数据的情况下不可修改） 
+  (3)drop 删除列
+     alter table emp1
+           drop column email
+  (4)rename重命名列
+     alter table emp1
+           rename column salary to sal;
+  (5)ddl 操作回滚没用
+4.删除表
+  drop table emp5;
+5.清空表
+  truncate table emp3;
+  delete from emp2//可以回滚rollback
+6.改变对象（表）的名称
+  rename emp2 to employees2;
+十九数据处理-- dml 数据操纵语言 maniputation//2018年3月10日 16:17:20
+1.事务是由完成若干项工作的dml语句组成的,可以回滚
+2.插入数据
+  insert into emp1
+         values(1001,'aa',sysdate,10000);
+  insert into emp1(last_name,
+                   salary
+                   )
+         values('s',15)
+  insert into emp1(employee_id,
+                   last_name,
+                   hire_date
+		   )
+               select employee_id,last_name,hire_date from employees where employee_id>1
+3.修改数据 
+  update emp1
+  set salary =1200,
+      job_id=111
+  where last_name=''
+4.删除数据
+  delete from table where '';
+二十、数据处理--事务   2018年3月10日  17:02:21
+1.事务：一组逻辑操作单元，使数据从一种状态变换到另一种状态
+   --构成：一个或多个dml语句
+           一个ddl语句
+	   一个dcl语句
+2.commit rollback
+  commit之前可以自由回滚
+  类似于git中的push
+  commit之后不能回滚
+  savepoint A;
+  rollback to savepoint A;
+3.其它用户不能看到当前用户所做的改变，直到当前用户结束事务
+  dml语句所涉及到的行被锁定，其它用户不能操作。例如：scott employee update但未commit，
+              在system用户中查询employee查询动作不执行，直到scott中commit
+	      system中查询数据后不提交，scott中无法查询
+  commit之后所有保存点被释放
+二十一、
+二十二、约束constraint//创建约束，添加约束2018/3/13
+1.数据类型
+2.约束是表级的强制约束
+3.not null：
+  unique：
+  primary key：
+  foreign key：
+  check：
+4.约束名默认为sys_cn
+5.可以同数据字典视图查看约束
+6.表级约束：可以作用在一个或多个列上
+  列级约束：只能作用在一个列上
+  定义方式：列约束必须跟在列的定义后面，表约束不能与列在一起，而是单独定义
+  not null只能定义在列级约束。
+7.not null
+  create table emp3(
+              id number(10) constraint emp2_id_nn not null,
+	      name varchar2(20)
+	      salary number(10,20)
+	      )
+8.check constraint
+9.unique
+  create table emp4(
+               id number(10) constraint emp3_uk unique,
+	       name varchar(20) constraint emp3_id not null,
+	       salary number(10,2),
+	       emaile varchar2(20),
+	       constraint emp3_emp3_email_uk unique(email)//表级约束 
+	       )
+  unique中可以插入不止一条null
+10.primary key:唯一且不能为空，不能为null
+   create table emp5(
+                id number(10),
+		name varchar(20),
+		constraint emp3_emp3_id_pk primary(id),
+		constraint emp3_emp3_name_uk unique(email)
+		)
+11.foreign key:
+   create table emp6(
+                employee_id number,
+                deoartment_id number(10),
+		constraint emp6_dept_id_fk foreign key(department_id) references department(department_id)
+		)
+   仅能插入外键中有的值，否则“违反完整性约束条件”
+   foreign key约束的关键字
+      freign key：在表级指定子表中的列
+      rreferences：标识在父表中的列
+      on delete cascade：级联删除-当父表中的列被删除，子表中的列也相对删除
+      on delete set null：级联置空-子表中想应的列置空
+   create table emp7(
+                employee_id number,
+                deoartment_id number(10),
+		constraint emp6_dept_id_fk foreign key(department_id) references department(department_id) on delete set null
+		)
+12.check:
+   create table em8(
+                employee_id number(10),
+		salary number(10,2) check(salary>1500 and salary<30000)
+		)
+13.可以添加或删除约束，但是不能修改约束
+   有效化或无效化约束
+   添加not null约束要使用modify语句
+   alter table emp5 
+         modify(salary number(10,2) not null)
+   alter table emp5
+         drop constraint emp5_name_nn
+   alter table emp5
+         add constraint emp5_name_uk unique(email)
+   alter table emp3
+         disable constraint emp3_email_uk
+   alter table emp3
+         enable constraint emp3_email_uk//“找到重复字”
+14.select constraint_name,constraint_type,search_condition
+         from user_constraints where table_name='employees'
+二十五、视图（view）：从表中抽出的逻辑上相关的数据集合
+1.view在断电后依旧存在、
+  视图是一种虚表
+  视图建立在已有表的基础上，视图赖以建立的这些表称为基表
+  像视图提供数据内容的语句为select 语句，可以将视图理解为存储起来的select语句
+  视图向用户提供基表数据的另一种表现形式
+2.控制数据访问
+  简化查询
+  避免重复访问相同的数据
+3.create view empview 
+         as 
+	 select employee_id id,last_name,salary from employees where department_id=80
+  "权限不足“
+  对视图的修改会影响到基表
+  create view empview2
+         as
+	 select employee_id id from employees
+	 with read only
+4.简单视图、复杂视图
+  复杂视图：创建视图时使用了分组函数
+  cretate view empview4
+          as
+          select department_name name,avg(salary) avg_sal 
+	  from employees e,departments d where e.department_id  d.department_id
+	  group by department_name
+5.drop view   empview4; 
+6.top-N分析
+  select rownum ,employee_id from employees order by salary
+  rownum 是一个伪列 与插入顺序有关
+  select rownum,last_name,salary from(
+            select employee_id,last_name,salary from employees order by salary des
+	    )
+	  where rownum<=10
+  rownum只能<,<=不能>
+  select rn,employee_id,last_name,salary from(  
+            select rownum rn,last_name,salary from(
+                   select employee_id,last_name,salary from employees order by salary des
+	    )
+   )where rn<=30 and rn>=20
+二十七、其它数据库对象--序列，索引，同义词
+1.序列：提供有规律的数值
+  索引：提高查询效率
+  同义词：给对象起别名
+2.序列：squence
+  --可供多个用户用来产生唯一数值的数据库对象
+  ---自动提供唯一数值
+  ---共享对象
+  ---主要用于提供主键值
+  ---将序列值装入内存可以提高访问效率
+ create squence empSeq
+         increment By 10--每次增长10
+	 start with 10--从10开始
+	 maxvalue 100--最大值
+	 cycle--需要循环
+	 nocache--不需要缓存登录
+ select empseq.currval from dual
+ select empseq.nextval from dual
+ insert into emp01 values(empsq.nextval,'ee',500)
+ 序列在下列情况下出现裂缝
+ --回滚
+ --系统异常
+ --多个表同时使用同一序列
+ select sequence_name,min_value,max_value,increment_by,last_number from user_squences;
+ drop sequence empseq
+ alter squence
+3. 索引index：
+   ---一种独立于表的模式对象，可以存储在与表不同的磁盘或表空间中
+   ---索引呗删除或损坏，不会对表产生影响，其影响只是查询速度
+   ---索引一旦建立，oracle管理系统会对其进行自动维护
+      而且由oracle管理系统决定何时使用索引，用户不用再查询语句中使用哪个索引
+   ---在删除一个表时，所有基于该表的索引会自动被删除
+   ---通过指针加速oracle服务器的查询速度
+   ---通过快速定位数据的方法，减少磁盘i/o
+   (1)创建索引
+   自动索引：在定义primary key或unique约束后，系统在相应的列上创建唯一索引
+   手动索引：用户可以在其它列上创建非唯一的索引，以加速查询
+   create index emp1_id_ix
+          on emp01(employee_id)
+   drop index emp01_id_ix
+   (2)什么时候创建索引
+   --列中的数据值分布范围很广
+   --列经常在where子句或连接条件中出现
+   --表经常被访问而且数据量很大，访问的数据大概占数据总量的2%-4%
+   (3)什么时候不要创建索引
+   --表很小
+   --列不经常作为连接条件或出现在where子句中
+   --查询的数据大于4%
+   --表经常更新
+4.同义词synonym
+  ---方便访问其它用户对象
+  ---缩短对象名字的长度
+  create synonym e for employees
+  select * from e；
+二十九、控制用户权限(privilege)及练习
+  ---create session(登录数据库)
+  ---create Table(创建表)
+  ---create sequence(创建序列)
+  ---create view(创建视图)
+  ---create procedure(创建过程)
+ 数据库安全性：
+   --系统安全性
+   --数据安全性，
+ 系统权限：对于数据库的权限
+      --系统权限(dba)：创建新用户，删除用户，删除表，备份表
+ 对象权限：操作数据库对象的权限
+ 以dba登录数据库
+      
+1.创建用户
+  --crate user user01 
+          identified by password;
+  --alter user user01
+          identified by password1;
+2.用户赋予权限
+  --grant create session,create table
+          to user01;
+  --alter user user01 quota unlimited on users;//设置表空间
+    alter user user01 quota 5m on users;
+3.角色/用户赋予角色
+  --create role my_role;
+  --grant create table,create view to my_role;
+  --grant my_role to user01,user02;  
+4.对象权限(系统用户及当前用户具有改权限)
+  --grant select,update on scott.employees to user01，user02；
+  --grant select,update on scott.employees to user01 with grant option//使用户具有分配权限的权利
+  --grant select,update on scott.employees to public;//向数据库所有用户分配权限
+5.revoke select on department from system
+三十、set操作符及联系
+---union/union all 并集
+---interesect 交集
+---minus 差集
+1.select employee_id,department_id from employees01
+  union all
+  select employee_id,department_id from employees02
+  ---
+  ---
+  ---
+三十二、高级子查询
+---exists,not exists
+---
+---
+---
+三十四、plsql基本语法
+1.declare 
+   ---声明的变量、类型、游标
+  begin
+   --程序执行部分
+  exception
+   --异常
+   --when..then
+  end
+2.dms_output.put_line('helloworld');
+3.declare
+    v_sal varchar2(20);
+  begin
+    select salary into v_sal from employees where employee_id = 100;
+    dbms_output.put_line(v_sal);
+  end;
+4.动态数据类型
+  declare 
+     v_sal employees.salary%type
+三十六、plsql
+1.plsql 基本语法
+2.记录类型
+3.流程控制
+  --条件判断
+    方式一：if....then elseif then..else...endif
+    方式二：case..when..then..
+                  when..then.. end
+  --循环结构
+    方式一：loop ...exit then...end loop；
+    方式二：while...loop...end loop；
+    方式三：for i in..
+4.......
+-------
+-----
+三十八、游标的使用1
+---在plsql中，对于处理多行记录的事务经常使用游标来实现
+---为了处理sql语句，oracle必须分配一片叫上下文的区域来处理所必须的信息，
+   其中包括要处理行的数目，一个指向语句被分析以后的表示形式的指针以及查询的活动集
+   游标是一个指向上下文的句柄或指针，通过游标，pl/sql可以控制上下文和处理语句时上下文区会发生些什么事
+---类似于itrator
+1.显式游标
+  --定义游标
+  --打开游标
+  --提取游标的数据
+  --关闭游标
+  declare
+   v_sal employees.salary%type;
+   cursor emp_sal_cursor is select salary from employees where department_id=80;
+  begin 
+     open emp_sal_cursor;
+     fetch emp_sal_cursor into v_sal;
+     while emp_sal_cursor%found loop
+       dbms_output.put_line(v_sal);
+       fetch emp_sal_cursor into v_sal;
+     end loop;
+     close emp_sal_cursor;
+  end;   
+  Oracle执行计划：https://www.cnblogs.com/Dreamer-1/p/6076440.html
