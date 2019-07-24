@@ -1,49 +1,55 @@
-*****容器*****
-
 01.spring注解驱动开发
+   容器
+   扩展原理
+   web
 
-02.@configration @Bean
+02.组件注册@configration @Bean
 --spring认为所有组件都应该注册在IOC容器中，组件之间通过容器自动装配
 --@configration 告诉spring这是一个配置类
---@Bean 给容器注册一个Bean;类型为返回值的类型；id为默认方法名
+--@Bean 
+    --给容器注册一个Bean;
+	--类型为返回值的类型；
+	--id为默认方法名，改名@Bean("person1")
 
-03.@ComponentScan //@ComponentScans
---<context:component-scan :xml包扫描，多个包用逗号分隔 只要标注了@Controller @Service @Repository(Dao) @Component 就会被扫描到
+03.组件注册@ComponentScan //@ComponentScans
+--<context:component-scan 
+  --:xml包扫描，多个包用逗号分隔 只要标注了
+  --@Controller @Service @Repository(Dao) @Component 就会被扫描到
 --@ComponentScan
   --(value="com.atguigu") 
   --(excludeFilters={@Filter(type=FilterType.Annotation,classes={Controller.class})
   --(includeFilters)
 
-04.@FilterType指定过滤规则(其它几种没记笔记，只记了这一种)
+04.组件注册@FilterType指定过滤规则(其它几种没记笔记，只记了这一种)
    --type=FilterType.Custom
    --implements TypeFilter
 
-05.@Scope("prototype")
+05.组件注册@Scope("prototype")
   ("singleton")//默认作用域 ioc容器启动时会创建对象
   ("prototype")//获取bean时创建对象
   ("request")
   ("session")
   ("global-session")
 
-06.@Lazy
+06.组件注册@Lazy
    --对单实例bean起作用
    --懒加载，延迟到第一次获取时创建对象
 
-07.@Conditional :过滤规则
+07.组件注册@Conditional :过滤规则
    --可以标在@Bean上 也可以标在@ComponentScan上
    --applicationContext.getEnveronment.getProperty("os.name")//获取环境变量的值--操作系统
    --run configration ->VM arguments ->-Dos.name=linux 
    --@Conditional({WindowsCondition.class})如果WindowsCondition的实现方法返回true，则注入这个bean  
    
-08.@import 导入bean
+08.组件注册@import 导入bean
    -- @Import({Dog.class, Cat.class})
 
-09.@import implements 
+09.组件注册@import implements 
  //返回需要导入的组件的全类名数组
 
-10.@Import implements ImportBeanDefinitionregistray//手动注册进容器
+10.组件注册@Import implements ImportBeanDefinitionregistray//手动注册进容器
 
-11.ColorFactoryBean implements FactoryBean<T> T为需要注册的bean
+11.组件注册ColorFactoryBean implements FactoryBean<T> T为需要注册的bean
    --用Bean注册该FactoryBean 
    --实际注册进容器的是T
    --想获取实际ColorFactoryBean在名称前加&

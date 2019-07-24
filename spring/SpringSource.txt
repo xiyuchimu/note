@@ -115,7 +115,7 @@ Spring容器的refresh()【创建刷新】;
 						 	1）、拿到InstantiationAwareBeanPostProcessor后置处理器；
 						 		postProcessAfterInstantiation()；
 						 	2）、拿到InstantiationAwareBeanPostProcessor后置处理器；
-						 		postProcessPropertyValues()；
+						 		postProcessPropertyValues()；//@Value值在这一步注入
 						 	=====赋值之前：===
 						 	3）、应用Bean属性的值；为属性利用setter方法等进行赋值；
 						 		applyPropertyValues(beanName, mbd, bw, pvs);
