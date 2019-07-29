@@ -110,12 +110,17 @@ Spring容器的refresh()【创建刷新】;
 						 	利用工厂方法或者对象的构造器创建出Bean实例；
 						 2）、applyMergedBeanDefinitionPostProcessors(mbd, beanType, beanName);
 						 	调用MergedBeanDefinitionPostProcessor的postProcessMergedBeanDefinition(mbd, beanType, beanName);
+						          --ScheduledAnnotationBeanPostProcessor
+								  --RequiredAnnotationBeanPostProcessor
+								  --InitDestroyAnnotationBeanPostProcessor
+								     --CommonAnnotationBeanPostProcessor
+								  --AutowiredAnnotationBeanPostProcessor
 						 3）、【Bean属性赋值】populateBean(beanName, mbd, instanceWrapper);
 						 	赋值之前：
 						 	1）、拿到InstantiationAwareBeanPostProcessor后置处理器；
 						 		postProcessAfterInstantiation()；
 						 	2）、拿到InstantiationAwareBeanPostProcessor后置处理器；
-						 		postProcessPropertyValues()；//@Value值在这一步注入
+						 		postProcessPropertyValues()；//@Value @Autowired值在这一步注入 
 						 	=====赋值之前：===
 						 	3）、应用Bean属性的值；为属性利用setter方法等进行赋值；
 						 		applyPropertyValues(beanName, mbd, bw, pvs);

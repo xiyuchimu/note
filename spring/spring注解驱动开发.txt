@@ -43,13 +43,15 @@
    
 08.组件注册@import 导入bean
    -- @Import({Dog.class, Cat.class})
+   --{@link Configuration}, {@link ImportSelector}, {@link ImportBeanDefinitionRegistrar}
+	 * or regular component classes to import.
 
-09.组件注册@import implements 
+09.组件注册@import implements ImportSelector
  //返回需要导入的组件的全类名数组
 
 10.组件注册@Import implements ImportBeanDefinitionregistray//手动注册进容器
 
-11.组件注册ColorFactoryBean implements FactoryBean<T> T为需要注册的bean
+11.组件注册 ColorFactoryBean implements FactoryBean<T> T为需要注册的bean
    --用Bean注册该FactoryBean 
    --实际注册进容器的是T
    --想获取实际ColorFactoryBean在名称前加&
@@ -97,7 +99,7 @@
    --@PropertySources
 
 20.自动装配 spring规范
-  --@Autowired bytype默认，找不到byname(成员变量名) 写在成员变量上 通过反射注入 写在set方法上 通过set方法注入
+  --@Autowired bytype默认，结果大于一byname(成员变量名) 写在成员变量上 通过反射注入 写在set方法上 通过set方法注入
     @Autowired(required=false)
   --@Qualifier("name") 指定需要装配的组件id
   --@Primary spring自动装配时，默认使用首选的bean。权重小于Qualifier
