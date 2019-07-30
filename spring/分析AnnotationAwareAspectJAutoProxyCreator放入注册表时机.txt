@@ -39,7 +39,7 @@ processConfigBeanDefinitions
    1.this.reader.loadBeanDefinitions(configClasses);//configClasses=MainOfAOP
 loadBeanDefinitions
 loadBeanDefinitionsForConfigurationClass//从configclass里取出
-   ----loadBeanDefinitionsForBeanMethod----遍历@Configration中成员方法注解
+   ----loadBeanDefinitionsForBeanMethod----***遍历@Configration中成员方法注解
    1.loadBeanDefinitionsFromImportedResources(configClass.getImportedResources());
    2.loadBeanDefinitionsFromRegistrars(configClass.getImportBeanDefinitionRegistrars());
            configClass.getImportBeanDefinitionRegistrars()==>AspectJAutoProxyRegistrar
