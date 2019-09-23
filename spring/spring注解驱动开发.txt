@@ -69,16 +69,20 @@
    --@PostConstruct //bean创建完成，并且属性赋值完成
    --@PreDestroy  //bean 销毁之前 
    
-15.生命周期 @Bean 初始化前后
+15.生命周期 BeanPostProicessor原理
    --实现BeanPostProCessor //覆盖该接口方法。**初始化前后**
    --实现的方法不能为null，否则不执行后面BeanPost
    
 16.生命周期 BeanPostProicessor原理
+   --postProcessBeforeInitialization:在任何初始化方法之前(如@Bean(initMethod=""),非构造方法)
+   --postProcessAfterInitialization
+   
    --fresh-finishBeanFactoryInitialization-->会在init前后调用15的方法
             --遍历得到容器中所有的beanPostProcessor
               --populateBean 属性赋值
 			  --initializeBean
-			      --applyBeanPostProcessorsBeforeInitialization
+			      --applyBeanPostProcessorsBeforeInitialization(其中一个返回值为null、
+				  ，不执行后面的postProcessBeforeInitialization)
 				  --invokeInitMethod
 				  --applyBeanPostProcessorsAfterInitialization
    

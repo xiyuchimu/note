@@ -129,7 +129,7 @@ Spring容器的refresh()【创建刷新】;
 						 		BeanNameAware\BeanClassLoaderAware\BeanFactoryAware
 						 	2）、【执行后置处理器初始化之前】applyBeanPostProcessorsBeforeInitialization(wrappedBean, beanName);
 						 		BeanPostProcessor.postProcessBeforeInitialization（）;
-						 	3）、【执行初始化方法】invokeInitMethods(beanName, wrappedBean, mbd);
+						 	3）、【执行初始化方法】invokeInitMethods(beanName, wrappedBean, mbd); @Bean(initMethod="init",destroyMethod="detory")
 						 		1）、是否是InitializingBean接口的实现；执行接口规定的初始化；
 						 		2）、是否自定义初始化方法；
 						 	4）、【执行后置处理器初始化之后】applyBeanPostProcessorsAfterInitialization
