@@ -1,0 +1,151 @@
+https://www.bilibili.com/video/av35354301/2p=2
+kafka
+https://zhuanlan.zhihu.com/p/37405836
+https://zhuanlan.zhihu.com/p/38269875
+http://www.ruanyifeng.com/blog/2018/01/assembly-language-primer
+.html汇编
+2.kafka消息队列
+客户端A要发送数据给B一般直接发送
+A->消息队列->
+2.点对点模式
+3.发布订阅模式
+https://zhuanlan.zhihu.com/p/37405836
+
+每个partition不再只有一个，而是有一
+个leader(红色）和多个replica(蓝色），
+生产者根据消息的topic和key值，确定
+了消息要发往哪个partition之后（假
+设是p1），会找到partition对应的
+leader(也就是broker2里的p1），然后将
+消息发给leader，leader负责消息的写
+入，并与其余的replica进行同步。
+一旦某一个partition的leader挂掉了，
+那么只需提拔一个replica出来，让它成
+为leader就ok了，系统依旧可以正常运
+行。
+https://zhuanlan.zhihu.com/p/38269875
+·Partition
+物理上的概念，每个topic包含一个或
+多个partition，一个partition对应一个
+文件夹，这个文件夹下存储partition的
+数据和索引文件，每个partition内部是
+有序的
+每一条消息只会被同一个消费组里的一
+个消费者实例消费，不同的消费组可以
+同时消费同一条消息
+https://www.cnblogs.com/snowwhite/p/10423377.html kafka学习指
+南
+https://blog.csdn.net/m0_37907797/article/details/102740903五层模
+型
+
+
+记录锁（Recourd Locks)也叫行锁
+-记录锁、间隙锁、临键锁都是排它锁
+间隙锁、临键锁都是排它锁
+间隙锁（Gap Locks)
+-间隙锁是封锁记录中的间隔、或者第
+一条索引记录之前的范围、又或者最后
+一条索引记录之后的范围
+-产生间隙锁的条件(RR事务隔离级别）
+--1.使用普通索引锁定
+--2.使用多列唯一索引
+-3.使用唯一索引锁定多行记录
+--对于使用唯一索引来搜索并给某一行
+记录加锁的语句，不会产生间隙锁
+--**非索引锁定全表
+唯一索引的间隙锁1,5,7,11
+-只使用记录锁，不会产生间隙锁
+-产生间隙锁
+-1.SELECT *FROM test WHERE id
+BETWEEN 5 AND 7 FOR UPDATE;
+锁id[5，11]5，11不可修改
+-2.SELECT *FROM test WHERE id
+=3FOR UPDATE;
+锁（1，5）？1，5可修改、不可插入（主键
+唯一性约束，相当于未锁住）
+普通索引的间隙锁（1，1)；(5，3);(7,8)；
+(11,12);
+-1.SELECT *FROM test1 WHERE
+number =3 FOR UPDATE;
+id[1,7)修改阻塞7可以修改
+number(1-8)的间隙中，修改阻
+塞，1、8可修改
+当number相同时，会根据主键id
+来排序，所以：
+1.事务3添加的id=6，number=
+8，这条数据是在（3，8）的区间里
+边，所以会被阻塞；
+2.事务4添加的id=8,number=
+8，这条数据则是在（8，12）区间里
+边，所以不会被阻塞；
+3.事务7的修改语句相当于在(3,
+8)的区间里边插入一条数据，所以也
+被阻塞了。
+结论：在普通索引列上，不管是何种
+查询，只要加锁，都会产生间隙锁，这
+跟唯一索引不一样；
+普通索引跟唯一索引中，数据间
+隙的分析，数据行是优先根据普通索引
+排序，再根据唯一索引排序。
+临键锁（Next-key Locks)
+临键锁，是记录锁与间隙锁的组合，它
+的封锁范围，既包含索引记录，又包含
+索引区间。
+注:
+临键锁的主要目的，也是为了避免幻
+读（Phantom Read)。如果把事务的隔
+离级别降级为RC，临键锁则也会失
+效。
+锁分类
+加锁机制
+--乐观锁
+--悲观锁
+-兼容性
+-共享锁也叫S锁读锁
+--排他锁也叫X锁写锁
+锁粒度
+--表锁
+-行锁innoDB
+-页锁
+锁模式
+-记寻销
+-gap锁
+-nextKey锁
+--意向锁
+--插入意向锁
+丢失更新
+https://bloq.csdn.net/sun8112133/article/details/89853755#_12
+https://www.zhihu.com/question/21044445书推
+荐、
+https://www.douban.com/group/topic/36609272/
+数据库隔离性
+https://cloud.tencent.com/developer/article/1429947
+MySQL的锁机制-记录锁、间隙锁、临
+键锁
+https://zhuanlan.zhihu.com/p/48269420
+
+
+MySQL的锁机制-记录锁、间隙锁、临
+键锁
+https://zhuanlan.zhihu.com/p/48269420
+https://blog.guitar-coder.cn/MySql%E9%94%81-%E9%97%B4%E9%9A%99%E9%94%81%E5%92%8C%E4%B8%B4%E9%94%AE%E9%94%81.html
+MVCC Multi-Version Concurrency
+Control,多版本并发控制
+https://juejin.im/post/5c68a4056fb9a049e063e0abhttps://blog.quitar-coder.cn/MySql%E9%94%81-%E9%97%B4%E9%9A%99%E9%94%81%E5%92%8C%E4%B8
+%B4%E9%94%AE%E9%94%81.html
+
+https://zhuanlan.zhihu.com/p/48269420
+
+
+
+https://bloq.csdn.net/She_lock/article/details/82022431
+https://blog.csdn.net/cugjiang126com/article/details/50544728
+https://iuejin.im/post/5c68a4056fb9a049e063e0ab
+https://juejin.im/post/5b82e0196fb9a019f47d1823
+https://blog.csdn.net/puhaiyang/article/details/72284702
+https://bloq.csdn.net/J080624/article/details/80703903 mysql语句执行顺
+序
+https://www.iteye.com/blog/sangei-2359584 mysql分组后的topN
+https://bloq.csdn.net/exodus3/article/details/82257200
+https://www.bilibili.com/video/av35354301?p=3
+
