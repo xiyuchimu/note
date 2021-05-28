@@ -1,3 +1,4 @@
+```mysql
 --建表
 --学生表
 CREATE TABLE `Student`(
@@ -65,73 +66,7 @@ insert into Score values('06' , '01' , 31);
 insert into Score values('06' , '03' , 34);
 insert into Score values('07' , '02' , 89);
 insert into Score values('07' , '03' , 98);
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
+
 练习题和sql语句
 
 -- 1、查询"01"课程比"02"课程成绩高的学生的信息及课程分数	
@@ -174,7 +109,6 @@ select a.s_id,a.s_name,0 as avg_score from
 	student a 
 	where a.s_id not in (
 				select distinct s_id from score);
-
 
 -- 5、查询所有同学的学生编号、学生姓名、选课总数、所有课程的总成绩
 select a.s_id,a.s_name,count(b.c_id) as sum_course,sum(b.s_score) as sum_score from 
@@ -359,33 +293,36 @@ from (select s_id,SUM(s_score) as sum_score from score GROUP BY s_id ORDER BY su
 	
 -- 21、查询不同老师所教不同课程平均分从高到低显示 
 		
+
 	select a.t_id,c.t_name,a.c_id,ROUND(avg(s_score),2) as avg_score from course a
 		left join score b on a.c_id=b.c_id 
 		left join teacher c on a.t_id=c.t_id
 		GROUP BY a.c_id,a.t_id,c.t_name ORDER BY avg_score DESC;
+
 -- 22、查询所有课程的成绩第2名到第3名的学生信息及该课程成绩
 			
+
 			select d.*,c.排名,c.s_score,c.c_id from (
-                select a.s_id,a.s_score,a.c_id,@i:=@i+1 as 排名 from score a,(select @i:=0)s where a.c_id='01'  
+	            select a.s_id,a.s_score,a.c_id,@i:=@i+1 as 排名 from score a,(select @i:=0)s where a.c_id='01'  
 								ORDER BY a.s_score DESC  
-            )c
-            left join student d on c.s_id=d.s_id
-            where 排名 BETWEEN 2 AND 3
-            UNION
-            select d.*,c.排名,c.s_score,c.c_id from (
-                select a.s_id,a.s_score,a.c_id,@j:=@j+1 as 排名 from score a,(select @j:=0)s where a.c_id='02'  
+	        )c
+	        left join student d on c.s_id=d.s_id
+	        where 排名 BETWEEN 2 AND 3
+	        UNION
+	        select d.*,c.排名,c.s_score,c.c_id from (
+	            select a.s_id,a.s_score,a.c_id,@j:=@j+1 as 排名 from score a,(select @j:=0)s where a.c_id='02'  
 								ORDER BY a.s_score DESC
-            )c
-            left join student d on c.s_id=d.s_id
-            where 排名 BETWEEN 2 AND 3
-            UNION
-            select d.*,c.排名,c.s_score,c.c_id from (
-                select a.s_id,a.s_score,a.c_id,@k:=@k+1 as 排名 from score a,(select @k:=0)s where a.c_id='03' 
+	        )c
+	        left join student d on c.s_id=d.s_id
+	        where 排名 BETWEEN 2 AND 3
+	        UNION
+	        select d.*,c.排名,c.s_score,c.c_id from (
+	            select a.s_id,a.s_score,a.c_id,@k:=@k+1 as 排名 from score a,(select @k:=0)s where a.c_id='03' 
 								ORDER BY a.s_score DESC
-            )c
-            left join student d on c.s_id=d.s_id
-            where 排名 BETWEEN 2 AND 3;
-			
+	        )c
+	        left join student d on c.s_id=d.s_id
+	        where 排名 BETWEEN 2 AND 3;
+
 -- 23、统计各科成绩各分数段人数：课程编号,课程名称,[100-85],[85-70],[70-60],[0-60]及所占百分比
 
 
@@ -403,7 +340,7 @@ from (select s_id,SUM(s_score) as sum_score from score GROUP BY s_id ORDER BY su
 											ROUND(100*(SUM(case when s_score >=0 and s_score <=60 then 1 else 0 end)/count(*)),2) as 百分比
 								from score GROUP BY c_id)e on a.c_id=e.c_id
 				left join course f on a.c_id = f.c_id
-				 
+
 -- 24、查询学生平均成绩及其名次 
 
 		select a.s_id,
@@ -411,6 +348,7 @@ from (select s_id,SUM(s_score) as sum_score from score GROUP BY s_id ORDER BY su
 				@k:=(case when @avg_score=a.avg_s then @k else @i end) as '保留空缺排名',
 				@avg_score:=avg_s as '平均分'
 		from (select s_id,ROUND(AVG(s_score),2) as avg_s from score GROUP BY s_id ORDER BY avg_s DESC)a,(select @avg_score:=0,@i:=0,@k:=0)b;
+
 -- 25、查询各科成绩前三名的记录
 			-- 1.选出b表比a表成绩大的所有组
 			-- 2.选出比当前id成绩大的 小于三个的
@@ -436,6 +374,7 @@ from (select s_id,SUM(s_score) as sum_score from score GROUP BY s_id ORDER BY su
 
 -- 30、查询同名同性学生名单，并统计同名人数 
 		
+
 		select a.s_name,a.s_sex,count(*) from student a  JOIN 
 					student b on a.s_id !=b.s_id and a.s_name = b.s_name and a.s_sex = b.s_sex
 		GROUP BY a.s_name,a.s_sex
@@ -444,6 +383,7 @@ from (select s_id,SUM(s_score) as sum_score from score GROUP BY s_id ORDER BY su
 
 -- 31、查询1990年出生的学生名单
 		
+
 		select s_name from student where s_birth like '1990%'
 
 -- 32、查询每门课程的平均成绩，结果按平均成绩降序排列，平均成绩相同时，按课程编号升序排列 
@@ -452,32 +392,25 @@ from (select s_id,SUM(s_score) as sum_score from score GROUP BY s_id ORDER BY su
 
 -- 33、查询平均成绩大于等于85的所有学生的学号、姓名和平均成绩 
 
-	select a.s_id,b.s_name,ROUND(avg(a.s_score),2) as avg_score from score a
-		left join student b on a.s_id=b.s_id GROUP BY s_id HAVING avg_score>=85
-	
+	select a.s_id,b.s_name,ROUND(avg(a.s_score),2) as avg_score from score a	left join student b on a.s_id=b.s_id GROUP BY s_id HAVING avg_score>=85
+
 -- 34、查询课程名称为"数学"，且分数低于60的学生姓名和分数 
 	
-		select a.s_name,b.s_score from score b join student a on a.s_id=b.s_id where b.c_id=(
-					select c_id from course where c_name ='数学') and b.s_score<60
+
+		select a.s_name,b.s_score from score b join student a on a.s_id=b.s_id where b.c_id=(				select c_id from course where c_name ='数学') and b.s_score<60
 
 -- 35、查询所有学生的课程及分数情况； 
 	
 		
-		select a.s_id,a.s_name,
-					SUM(case c.c_name when '语文' then b.s_score else 0 end) as '语文',
-					SUM(case c.c_name when '数学' then b.s_score else 0 end) as '数学',
-					SUM(case c.c_name when '英语' then b.s_score else 0 end) as '英语',
-					SUM(b.s_score) as  '总分'
-		from student a left join score b on a.s_id = b.s_id 
-		left join course c on b.c_id = c.c_id 
-		GROUP BY a.s_id,a.s_name
+
+		select a.s_id,a.s_name,				SUM(case c.c_name when '语文' then b.s_score else 0 end) as '语文',				SUM(case c.c_name when '数学' then b.s_score else 0 end) as '数学',				SUM(case c.c_name when '英语' then b.s_score else 0 end) as '英语',				SUM(b.s_score) as  '总分'	from student a left join score b on a.s_id = b.s_id 	left join course c on b.c_id = c.c_id 	GROUP BY a.s_id,a.s_name
 
 
  -- 36、查询任何一门课程成绩在70分以上的姓名、课程名称和分数； 
 			select a.s_name,b.c_name,c.s_score from course b left join score c on b.c_id = c.c_id
 				left join student a on a.s_id=c.s_id where c.s_score>=70
 
-		
+?		
 
 -- 37、查询不及格的课程
 		select a.s_id,a.c_id,b.c_name,a.s_score from score a left join course b on a.c_id = b.c_id
@@ -492,17 +425,8 @@ from (select s_id,SUM(s_score) as sum_score from score GROUP BY s_id ORDER BY su
 
 -- 40、查询选修"张三"老师所授课程的学生中，成绩最高的学生信息及其成绩
 
-		
-		-- 查询老师id	
-		select c_id from course c,teacher d where c.t_id=d.t_id and d.t_name='张三'
-		-- 查询最高分（可能有相同分数）
-		select MAX(s_score) from score where c_id='02'
-		-- 查询信息
-		select a.*,b.s_score,b.c_id,c.c_name from student a
-			LEFT JOIN score b on a.s_id = b.s_id
-			LEFT JOIN course c on b.c_id=c.c_id
-			where b.c_id =(select c_id from course c,teacher d where c.t_id=d.t_id and d.t_name='张三')
-			and b.s_score in (select MAX(s_score) from score where c_id='02')
+
+		-- 查询老师id		select c_id from course c,teacher d where c.t_id=d.t_id and d.t_name='张三'	-- 查询最高分（可能有相同分数）	select MAX(s_score) from score where c_id='02'	-- 查询信息	select a.*,b.s_score,b.c_id,c.c_name from student a		LEFT JOIN score b on a.s_id = b.s_id		LEFT JOIN course c on b.c_id=c.c_id		where b.c_id =(select c_id from course c,teacher d where c.t_id=d.t_id and d.t_name='张三')		and b.s_score in (select MAX(s_score) from score where c_id='02')
 
 
 -- 41、查询不同课程成绩相同的学生的学生编号、课程编号、学生成绩 
@@ -529,15 +453,14 @@ from (select s_id,SUM(s_score) as sum_score from score GROUP BY s_id ORDER BY su
 --46、查询各学生的年龄
 	-- 按照出生日期来算，当前月日 < 出生年月的月日则，年龄减一
 
-	select s_birth,(DATE_FORMAT(NOW(),'%Y')-DATE_FORMAT(s_birth,'%Y') - 
-				(case when DATE_FORMAT(NOW(),'%m%d')>DATE_FORMAT(s_birth,'%m%d') then 0 else 1 end)) as age
-		from student;
+	select s_birth,(DATE_FORMAT(NOW(),'%Y')-DATE_FORMAT(s_birth,'%Y') - 			(case when DATE_FORMAT(NOW(),'%m%d')>DATE_FORMAT(s_birth,'%m%d') then 0 else 1 end)) as age	from student;
 
 
 -- 47、查询本周过生日的学生
 	select * from student where WEEK(DATE_FORMAT(NOW(),'%Y%m%d'))=WEEK(s_birth)
 	select * from student where YEARWEEK(s_birth)=YEARWEEK(DATE_FORMAT(NOW(),'%Y%m%d'))
 	
+
 	select WEEK(DATE_FORMAT(NOW(),'%Y%m%d'))
 
 -- 48、查询下周过生日的学生
@@ -546,9 +469,9 @@ from (select s_id,SUM(s_score) as sum_score from score GROUP BY s_id ORDER BY su
 -- 49、查询本月过生日的学生
 
 	select * from student where MONTH(DATE_FORMAT(NOW(),'%Y%m%d')) =MONTH(s_birth)
-	
+
 -- 50、查询下月过生日的学生
 	select * from student where MONTH(DATE_FORMAT(NOW(),'%Y%m%d'))+1 =MONTH(s_birth)
 ————————————————
-版权声明：本文为CSDN博主「启明星的指引」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。
-原文链接：https://blog.csdn.net/fashion2014/article/details/78826299/
+```
+
